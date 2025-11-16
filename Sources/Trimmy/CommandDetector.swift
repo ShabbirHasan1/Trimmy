@@ -4,6 +4,14 @@ import Foundation
 struct CommandDetector {
     let settings: AppSettings
 
+    func cleanBoxDrawingCharacters(_ text: String) -> String? {
+        guard self.settings.removeBoxDrawing else { return nil }
+        let pattern = "│ │"
+        guard text.contains(pattern) else { return nil }
+        let cleaned = text.replacingOccurrences(of: pattern, with: "")
+        return cleaned == text ? nil : cleaned
+    }
+
     func transformIfCommand(_ text: String) -> String? {
         guard text.contains("\n") else { return nil }
 

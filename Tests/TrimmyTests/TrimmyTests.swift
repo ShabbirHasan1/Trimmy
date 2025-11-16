@@ -164,4 +164,30 @@ struct TrimmyTests {
         let detectorHigh = CommandDetector(settings: settingsHigh)
         #expect(detectorHigh.transformIfCommand(text) == "Not really a command just text")
     }
+
+    @Test
+    func removesBoxDrawingCharacters() {
+        let settings = AppSettings()
+        settings.removeBoxDrawing = true
+        let detector = CommandDetector(settings: settings)
+        let text = "hello │ │ world │ │ test"
+        #expect(detector.cleanBoxDrawingCharacters(text) == "hello  world  test")
+    }
+
+    @Test
+    func returnsNilWhenNoBoxDrawingCharacters() {
+        let settings = AppSettings()
+        let detector = CommandDetector(settings: settings)
+        let text = "hello world test"
+        #expect(detector.cleanBoxDrawingCharacters(text) == nil)
+    }
+
+    @Test
+    func respectsRemoveBoxDrawingSetting() {
+        let settings = AppSettings()
+        settings.removeBoxDrawing = false
+        let detector = CommandDetector(settings: settings)
+        let text = "hello │ │ world"
+        #expect(detector.cleanBoxDrawingCharacters(text) == nil)
+    }
 }

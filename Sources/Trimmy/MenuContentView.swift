@@ -33,6 +33,7 @@ struct MenuContentView: View {
                     }
                 }
                 Toggle("Keep blank lines", isOn: self.$settings.preserveBlankLines)
+                Toggle("Remove box drawing chars (│ │)", isOn: self.$settings.removeBoxDrawing)
                 Toggle("Launch at login", isOn: self.$settings.launchAtLogin)
                 Button("Trim Clipboard Now") {
                     self.monitor.trimClipboardIfNeeded(force: true)

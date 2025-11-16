@@ -13,6 +13,7 @@ struct SettingsView: View {
             }
             Toggle("Keep blank lines", isOn: self.$settings.preserveBlankLines)
             Toggle("Auto-trim enabled", isOn: self.$settings.autoTrimEnabled)
+            Toggle("Remove box drawing chars (│ │)", isOn: self.$settings.removeBoxDrawing)
         }
         .padding()
         .frame(width: 320)
