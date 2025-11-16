@@ -16,7 +16,7 @@
 
 ## Quick start
 Get the precompiled binary from [Releases](https://github.com/steipete/Trimmy/releases)
-- or -
+ - or -
 1. Build: `swift build -c release` (Swift 6, macOS 15+).
 2. Bundle: `./Scripts/package_app.sh release` → `Trimmy.app`.
 3. Launch: open `Trimmy.app` (or add to Login Items). Menu shows Auto-Trim toggle, Aggressiveness submenu, Keep blank lines toggle, Trim Now, and last-trim status.
