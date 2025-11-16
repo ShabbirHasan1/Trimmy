@@ -1,5 +1,10 @@
 # Changelog
 
+# Changelog
+
+## 0.1.1 — 2025-11-16
+- Clipboard flattening now repairs accidental newlines inside tokens (e.g., `N\nODE_PATH` → `NODE_PATH`) to avoid inserting stray spaces when copying shell commands.
+
 ## 0.1.0 — 2025-11-16
 - Initial release of Trimmy (macOS 15+, menu-bar only).
 - Auto-flattens multi-line shell commands copied to the clipboard; respects `\` continuations, collapses whitespace, optional blank-line preservation.
