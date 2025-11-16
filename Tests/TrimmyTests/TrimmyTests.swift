@@ -9,15 +9,16 @@ final class TrimmyTests: XCTestCase {
         settings.autoTrimEnabled = true
         let detector = CommandDetector(settings: settings)
 
-        let input = """
-        cd /Users/steipete/Projects/Peekaboo && N
-        ODE_PATH=../poltergeist/node_modules ./runner pnpm --dir ../poltergeist exec tsx ../poltergeist/src/polter.ts
-        """
+        let input =
+            "cd /Users/steipete/Projects/Peekaboo && N\n" +
+            "ODE_PATH=../poltergeist/node_modules ./runner pnpm " +
+            "--dir ../poltergeist exec tsx ../poltergeist/src/polter.ts"
 
         let flattened = detector.transformIfCommand(input)
-        XCTAssertEqual(
-            flattened,
-            "cd /Users/steipete/Projects/Peekaboo && NODE_PATH=../poltergeist/node_modules ./runner pnpm --dir ../poltergeist exec tsx ../poltergeist/src/polter.ts")
+        let expected =
+            "cd /Users/steipete/Projects/Peekaboo && NODE_PATH=../poltergeist/node_modules " +
+            "./runner pnpm --dir ../poltergeist exec tsx ../poltergeist/src/polter.ts"
+        XCTAssertEqual(flattened, expected)
     }
 
     func testLeavesSingleLineAlone() {

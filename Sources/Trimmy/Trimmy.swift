@@ -36,12 +36,12 @@ struct CommandDetector {
         if lines.count > 10 { return nil } // skip very large copies to avoid unintended flattening
 
         var score = 0
-        if text.contains("\n") { score += 1 }
         if text.contains("\\\n") { score += 1 }
         if text.range(of: #"[|&]{1,2}"#, options: .regularExpression) != nil { score += 1 }
         if text.range(of: #"(^|\n)\s*\$"#, options: .regularExpression) != nil { score += 1 }
         if lines.allSatisfy(self.isLikelyCommandLine(_:)) { score += 1 }
         if text.range(of: #"(?m)^\s*(sudo\s+)?[A-Za-z0-9./~_-]+"#, options: .regularExpression) != nil { score += 1 }
+        if text.range(of: #"[-/]"#, options: .regularExpression) != nil { score += 1 }
 
         guard score >= self.settings.aggressiveness.scoreThreshold else { return nil }
 
@@ -63,15 +63,15 @@ struct CommandDetector {
         if self.settings.preserveBlankLines {
             result = result.replacingOccurrences(of: "\n\\s*\n", with: placeholder, options: .regularExpression)
         }
-        // Repair cases where a newline sneaks into a token (e.g., "N\nODE_PATH").
+        // Repair cases where a newline sneaks into an ALLCAPS-ish token (e.g., "N\nODE_PATH").
         result = result.replacingOccurrences(
-            of: #"(?<!\n)([A-Za-z0-9_.-])\s*\n\s*([A-Za-z0-9_.-])(?!\n)"#,
+            of: #"(?<!\n)([A-Z0-9_.-])\s*\n\s*([A-Z0-9_.-])(?!\n)"#,
             with: "$1$2",
             options: .regularExpression)
         // Remove line-continuation backslashes plus newline.
         result = result.replacingOccurrences(of: #"\\\s*\n"#, with: " ", options: .regularExpression)
-        // Replace remaining newlines with single spaces.
-        result = result.replacingOccurrences(of: "\n", with: " ")
+        // Replace any run of newlines with a single space.
+        result = result.replacingOccurrences(of: #"\n+"#, with: " ", options: .regularExpression)
         // Collapse repeated whitespace.
         result = result.replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
         if self.settings.preserveBlankLines {

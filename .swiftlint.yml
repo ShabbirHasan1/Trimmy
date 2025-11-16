@@ -2,8 +2,8 @@
 
 # Paths to include
 included:
-  - Apps
-  - Core
+  - Sources
+  - Tests
 
 # Paths to exclude
 excluded:
