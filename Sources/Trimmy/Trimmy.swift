@@ -99,7 +99,7 @@ struct CommandDetector {
 final class ClipboardMonitor: ObservableObject {
     private let settings: AppSettings
     private let pasteboard = NSPasteboard.general
-    private let trimmyMarker = NSPasteboard.PasteboardType("dev.peter.trimmy")
+    private let trimmyMarker = NSPasteboard.PasteboardType("com.steipete.trimmy")
     private var timer: DispatchSourceTimer?
     private var lastSeenChangeCount: Int
     private var detector: CommandDetector { CommandDetector(settings: self.settings) }
@@ -313,11 +313,11 @@ struct MenuContentView: View {
         let versionString = build.isEmpty ? version : "\(version) (\(build))"
         let credits = NSMutableAttributedString(string: "Peter Steinberger — MIT License\n")
         credits.append(self.makeLink("GitHub", urlString: "https://github.com/steipete/Trimmy"))
-        credits.append(NSAttributedString(string: "\n"))
+        credits.append(self.separator)
         credits.append(self.makeLink("Website", urlString: "https://steipete.me"))
-        credits.append(NSAttributedString(string: "\n"))
+        credits.append(self.separator)
         credits.append(self.makeLink("Twitter", urlString: "https://twitter.com/steipete"))
-        credits.append(NSAttributedString(string: "\n"))
+        credits.append(self.separator)
         credits.append(self.makeLink("Email", urlString: "mailto:peter@steipete.me"))
 
         let options: [NSApplication.AboutPanelOptionKey: Any] = [
@@ -343,6 +343,12 @@ struct MenuContentView: View {
             .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
         ]
         return NSAttributedString(string: title, attributes: attributes)
+    }
+
+    private var separator: NSAttributedString {
+        NSAttributedString(string: " · ", attributes: [
+            .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
+        ])
     }
 }
 
