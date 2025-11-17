@@ -1,12 +1,10 @@
 # Changelog
 
-## 0.2.4 — 2025-11-17
-- Added optional stripping of box-drawing separators (│ │) and collapse the leftover spaces so clipped prompts paste cleanly.
-- Expanded box-drawing test coverage and ensured command flattening still works after cleaning.
-
 ## 0.2.3 — 2025-11-17
 - Refactor into modular files (settings, detector, monitor, UI/app) and enable SwiftLint on Sources/Tests.
 - Patch version bump to 0.2.3 (7).
+- Optional stripping of box-drawing separators (│ │) with whitespace collapse so prompt-style borders paste cleanly.
+- Expanded box-drawing test coverage and ensured command flattening still works after cleaning.
 
 ## 0.2.2 — 2025-11-16
 - About panel now lists GitHub · Website · Twitter · Email links inline (matches CodexBar).
