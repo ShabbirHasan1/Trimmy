@@ -8,8 +8,15 @@ struct CommandDetector {
         guard self.settings.removeBoxDrawing else { return nil }
         let pattern = "│ │"
         guard text.contains(pattern) else { return nil }
-        let cleaned = text.replacingOccurrences(of: pattern, with: "")
-        return cleaned == text ? nil : cleaned
+        let cleaned = text.replacingOccurrences(of: pattern, with: " ")
+        // Collapse any doubled spaces left behind after stripping the glyphs.
+        let collapsed = cleaned.replacingOccurrences(
+            of: #" {2,}"#,
+            with: " ",
+            options: .regularExpression
+        )
+        let trimmed = collapsed.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed == text ? nil : trimmed
     }
 
     func transformIfCommand(_ text: String) -> String? {

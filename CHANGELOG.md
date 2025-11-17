@@ -1,16 +1,19 @@
 # Changelog
 
-## 0.2.1 — 2025-11-16
-- Moved the last-trim preview to sit directly beneath “Trim Clipboard Now” for a faster read.
-- Bumped bundle version/build (0.2.1/5).
+## 0.2.4 — 2025-11-17
+- Added optional stripping of box-drawing separators (│ │) and collapse the leftover spaces so clipped prompts paste cleanly.
+
+## 0.2.3 — 2025-11-17
+- Refactor into modular files (settings, detector, monitor, UI/app) and enable SwiftLint on Sources/Tests.
+- Patch version bump to 0.2.3 (7).
 
 ## 0.2.2 — 2025-11-16
 - About panel now lists GitHub · Website · Twitter · Email links inline (matches CodexBar).
 - Expanded detector test coverage across aggressiveness levels and edge cases (blank lines, backslashes, prose).
 
-## 0.2.3 — 2025-11-17
-- Refactor into modular files (settings, detector, monitor, UI/app) and enable SwiftLint on Sources/Tests.
-- Patch version bump to 0.2.3 (7).
+## 0.2.1 — 2025-11-16
+- Moved the last-trim preview to sit directly beneath “Trim Clipboard Now” for a faster read.
+- Bumped bundle version/build (0.2.1/5).
 
 ## 0.2.0 — 2025-11-16
 - Sparkle auto-updates (Check for Updates…, auto-check toggle) with GitHub feed and signed appcast.
