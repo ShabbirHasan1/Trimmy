@@ -46,10 +46,6 @@ struct MenuContentView: View {
             Button("About Trimmy") {
                 self.showAbout()
             }
-            Divider()
-            Button("Quit") {
-                NSApplication.shared.terminate(nil)
-            }
         }
         .padding(.vertical, 6)
         .padding(.horizontal, 10)

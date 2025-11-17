@@ -19,6 +19,8 @@ struct TrimmyApp: App {
     var body: some Scene {
         MenuBarExtra("Trimmy", systemImage: "scissors") {
             MenuContentView(monitor: self.monitor, settings: self.settings, updater: self.appDelegate.updaterController)
+            Divider()
+            Button("Quit") { NSApplication.shared.terminate(nil) }
         }
         Settings {
             SettingsView(settings: self.settings)
