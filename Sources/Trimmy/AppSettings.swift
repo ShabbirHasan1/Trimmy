@@ -37,6 +37,7 @@ final class AppSettings: ObservableObject {
     @AppStorage("aggressiveness") var aggressiveness: Aggressiveness = .normal
     @AppStorage("preserveBlankLines") var preserveBlankLines: Bool = false
     @AppStorage("autoTrimEnabled") var autoTrimEnabled: Bool = true
+    @AppStorage("removeBoxDrawing") var removeBoxDrawing: Bool = true
     @AppStorage("launchAtLogin") var launchAtLogin: Bool = false {
         didSet { LaunchAtLoginManager.setEnabled(self.launchAtLogin) }
     }

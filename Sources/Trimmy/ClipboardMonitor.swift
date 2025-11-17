@@ -44,18 +44,26 @@ final class ClipboardMonitor: ObservableObject {
         guard let text = self.readTextFromPasteboard() else { return false }
         guard self.settings.autoTrimEnabled || force else { return false }
 
-        let transformed: String
-        if force {
-            transformed = self.detector.transformIfCommand(text) ?? text
-            if transformed == text, !text.contains("\\\n"), !text.contains("\n") { return false }
-        } else {
-            guard let candidate = detector.transformIfCommand(text) else { return false }
-            transformed = candidate
+        var currentText = text
+        var wasTransformed = false
+
+        if let cleaned = self.detector.cleanBoxDrawingCharacters(currentText) {
+            currentText = cleaned
+            wasTransformed = true
         }
 
-        self.writeTrimmed(transformed)
+        if let commandTransformed = self.detector.transformIfCommand(currentText) {
+            currentText = commandTransformed
+            wasTransformed = true
+        } else if force {
+            if !wasTransformed, !text.contains("\\\n"), !text.contains("\n") { return false }
+        } else if !wasTransformed {
+            return false
+        }
+
+        self.writeTrimmed(currentText)
         self.lastSeenChangeCount = self.pasteboard.changeCount
-        self.updateSummary(with: transformed)
+        self.updateSummary(with: currentText)
         return true
     }
 

@@ -10,6 +10,7 @@
   - **Normal (default):** balances caution and helpfulness. Example: a `brew update \ && brew upgrade` copy from a blog post.
   - **High:** flattens almost any multi-line text that *could* be a command. Example: a quick two-line `ls` + `cd` copied from chat.
 - Optional "Keep blank lines" so scripts with intentional spacing stay readable.
+- Optional "Remove box drawing chars (│ │)" to clean prompt-style borders and collapse the leftover whitespace.
 - Manual "Trim Clipboard Now" button if you just want to force a flatten.
 - Optional "Launch at login" toggle (macOS 13+ via SMAppService).
 - Auto-update via Sparkle (Check for Updates… + auto-check toggle; feed from GitHub Releases).
@@ -42,7 +43,7 @@ Get the precompiled binary from [Releases](https://github.com/steipete/Trimmy/re
 ## Notes
 - Bundle ID: `com.steipete.trimmy` (LSUIElement menu-bar app).
 - Polling: ~150ms with leeway; grace delay ~80ms to let promised data arrive.
-- Clipboard writes tag themselves with `dev.peter.trimmy` to avoid loops.
+- Clipboard writes tag themselves with `com.steipete.trimmy` to avoid loops.
 
 ## License
 MIT
