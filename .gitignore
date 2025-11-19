@@ -37,5 +37,6 @@ playground.xcworkspace
 *.tgz
 *.dmg
 *.pkg
+*.delta
 Trimmy.app
 Icon.iconset
