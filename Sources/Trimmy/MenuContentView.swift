@@ -22,22 +22,7 @@ struct MenuContentView: View {
             Button("Trim Clipboard") {
                 self.handleTrimClipboard()
             }
-            Button {
-                self.handleTypeClipboard()
-            } label: {
-                if let shortcut = KeyboardShortcuts.getShortcut(for: .typeTrimmed),
-                   self.settings.hotkeyEnabled {
-                    HStack {
-                        Text("Type Clipboard Text")
-                        Spacer()
-                        Text(shortcut.description)
-                            .foregroundStyle(.tertiary)
-                    }
-                } else {
-                    Text("Type Clipboard Text")
-                }
-            }
-            .disabled(!self.hotkeyManager.hasClipboardText)
+            self.typeClipboardButton
             VStack(alignment: .leading, spacing: 2) {
                 Text("Last:")
                     .font(.caption2)
@@ -126,6 +111,109 @@ struct MenuContentView: View {
         NSAttributedString(string: " · ", attributes: [
             .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
         ])
+    }
+}
+
+private extension MenuContentView {
+    var typeClipboardButton: some View {
+        Button("Type Clipboard Text") {
+            self.handleTypeClipboard()
+        }
+        .applyKeyboardShortcut(self.typeKeyboardShortcut)
+        .disabled(!self.hotkeyManager.hasClipboardText)
+    }
+
+    var typeKeyboardShortcut: KeyboardShortcut? {
+        guard self.settings.hotkeyEnabled,
+              let shortcut = KeyboardShortcuts.getShortcut(for: .typeTrimmed) else { return nil }
+        return shortcut.swiftUIShortcut
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func applyKeyboardShortcut(_ shortcut: KeyboardShortcut?) -> some View {
+        if let shortcut {
+            self.keyboardShortcut(shortcut)
+        } else {
+            self
+        }
+    }
+}
+
+private extension KeyboardShortcuts.Shortcut {
+    var swiftUIShortcut: KeyboardShortcut? {
+        guard let keyEquivalent = self.key?.swiftUIKeyEquivalent else { return nil }
+        let modifiers = EventModifiers(self.modifiers)
+        return KeyboardShortcut(keyEquivalent, modifiers: modifiers)
+    }
+}
+
+private extension KeyboardShortcuts.Key {
+    var swiftUIKeyEquivalent: KeyEquivalent? {
+        switch self {
+        case .a: return KeyEquivalent("a")
+        case .b: return KeyEquivalent("b")
+        case .c: return KeyEquivalent("c")
+        case .d: return KeyEquivalent("d")
+        case .e: return KeyEquivalent("e")
+        case .f: return KeyEquivalent("f")
+        case .g: return KeyEquivalent("g")
+        case .h: return KeyEquivalent("h")
+        case .i: return KeyEquivalent("i")
+        case .j: return KeyEquivalent("j")
+        case .k: return KeyEquivalent("k")
+        case .l: return KeyEquivalent("l")
+        case .m: return KeyEquivalent("m")
+        case .n: return KeyEquivalent("n")
+        case .o: return KeyEquivalent("o")
+        case .p: return KeyEquivalent("p")
+        case .q: return KeyEquivalent("q")
+        case .r: return KeyEquivalent("r")
+        case .s: return KeyEquivalent("s")
+        case .t: return KeyEquivalent("t")
+        case .u: return KeyEquivalent("u")
+        case .v: return KeyEquivalent("v")
+        case .w: return KeyEquivalent("w")
+        case .x: return KeyEquivalent("x")
+        case .y: return KeyEquivalent("y")
+        case .z: return KeyEquivalent("z")
+        case .zero: return KeyEquivalent("0")
+        case .one: return KeyEquivalent("1")
+        case .two: return KeyEquivalent("2")
+        case .three: return KeyEquivalent("3")
+        case .four: return KeyEquivalent("4")
+        case .five: return KeyEquivalent("5")
+        case .six: return KeyEquivalent("6")
+        case .seven: return KeyEquivalent("7")
+        case .eight: return KeyEquivalent("8")
+        case .nine: return KeyEquivalent("9")
+        case .comma: return KeyEquivalent(",")
+        case .period: return KeyEquivalent(".")
+        case .slash: return KeyEquivalent("/")
+        case .semicolon: return KeyEquivalent(";")
+        case .quote: return KeyEquivalent("\"")
+        case .leftBracket: return KeyEquivalent("[")
+        case .rightBracket: return KeyEquivalent("]")
+        case .minus: return KeyEquivalent("-")
+        case .equal: return KeyEquivalent("=")
+        case .space: return .space
+        case .tab: return .tab
+        case .return: return .return
+        case .escape: return .escape
+        default: return nil
+        }
+    }
+}
+
+private extension EventModifiers {
+    init(_ flags: NSEvent.ModifierFlags) {
+        var value: EventModifiers = []
+        if flags.contains(.command) { value.insert(.command) }
+        if flags.contains(.option) { value.insert(.option) }
+        if flags.contains(.control) { value.insert(.control) }
+        if flags.contains(.shift) { value.insert(.shift) }
+        self = value
     }
 }
 
