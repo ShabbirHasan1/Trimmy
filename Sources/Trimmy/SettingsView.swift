@@ -248,8 +248,24 @@ struct HotkeySettingsPane: View {
                     .font(.footnote)
                     .foregroundStyle(.tertiary)
             }
+
+            PreferenceToggleRow(
+                title: "Enable global “Trim Clipboard” hotkey",
+                subtitle: "Instantly trims the clipboard without opening the menu.",
+                binding: self.$settings.trimHotkeyEnabled)
+
+            VStack(alignment: .leading, spacing: 6) {
+                KeyboardShortcuts.Recorder("", name: .trimClipboard)
+                    .labelsHidden()
+                Text("Use this shortcut to trigger “Trim Clipboard” anywhere.")
+                    .font(.footnote)
+                    .foregroundStyle(.tertiary)
+            }
         }
         .onChange(of: self.settings.hotkeyEnabled) { _, _ in
+            self.hotkeyManager.refreshRegistration()
+        }
+        .onChange(of: self.settings.trimHotkeyEnabled) { _, _ in
             self.hotkeyManager.refreshRegistration()
         }
         .frame(maxWidth: .infinity, alignment: .leading)

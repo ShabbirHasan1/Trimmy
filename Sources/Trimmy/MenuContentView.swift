@@ -19,10 +19,7 @@ struct MenuContentView: View {
             }
             .toggleStyle(.checkbox)
 
-            Button("Trim Clipboard") {
-                self.handleTrimClipboard()
-            }
-            .keyboardShortcut("t", modifiers: [.command])
+            self.trimClipboardButton
             self.typeClipboardButton
             VStack(alignment: .leading, spacing: 2) {
                 Text("Last:")
@@ -116,6 +113,13 @@ struct MenuContentView: View {
 }
 
 private extension MenuContentView {
+    var trimClipboardButton: some View {
+        Button("Trim Clipboard") {
+            self.handleTrimClipboard()
+        }
+        .applyKeyboardShortcut(self.trimKeyboardShortcut)
+    }
+
     var typeClipboardButton: some View {
         Button("Type Clipboard Text") {
             self.handleTypeClipboard()
@@ -127,6 +131,12 @@ private extension MenuContentView {
     var typeKeyboardShortcut: KeyboardShortcut? {
         guard self.settings.hotkeyEnabled,
               let shortcut = KeyboardShortcuts.getShortcut(for: .typeTrimmed) else { return nil }
+        return shortcut.swiftUIShortcut
+    }
+
+    var trimKeyboardShortcut: KeyboardShortcut? {
+        guard self.settings.trimHotkeyEnabled,
+              let shortcut = KeyboardShortcuts.getShortcut(for: .trimClipboard) else { return nil }
         return shortcut.swiftUIShortcut
     }
 }

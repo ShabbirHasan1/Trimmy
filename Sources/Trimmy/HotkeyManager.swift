@@ -4,6 +4,7 @@ import KeyboardShortcuts
 @MainActor
 extension KeyboardShortcuts.Name {
     static let typeTrimmed = Self("typeTrimmed")
+    static let trimClipboard = Self("trimClipboard")
 }
 
 @MainActor
@@ -24,6 +25,9 @@ final class HotkeyManager: ObservableObject {
         self.settings.hotkeyEnabledChanged = { [weak self] _ in
             self?.refreshRegistration()
         }
+        self.settings.trimHotkeyEnabledChanged = { [weak self] _ in
+            self?.refreshRegistration()
+        }
         self.ensureDefaultShortcut()
         self.registerHandlerIfNeeded()
         self.refreshRegistration()
@@ -36,6 +40,12 @@ final class HotkeyManager: ObservableObject {
         } else {
             KeyboardShortcuts.disable(.typeTrimmed)
         }
+
+        if self.settings.trimHotkeyEnabled {
+            KeyboardShortcuts.enable(.trimClipboard)
+        } else {
+            KeyboardShortcuts.disable(.trimClipboard)
+        }
     }
 
     @discardableResult
@@ -43,10 +53,18 @@ final class HotkeyManager: ObservableObject {
         self.handleHotkey()
     }
 
+    @discardableResult
+    func trimClipboardNow() -> Bool {
+        self.handleTrimClipboardHotkey()
+    }
+
     private func registerHandlerIfNeeded() {
         guard !self.handlerRegistered else { return }
         KeyboardShortcuts.onKeyUp(for: .typeTrimmed) { [weak self] in
             self?.handleHotkey()
+        }
+        KeyboardShortcuts.onKeyUp(for: .trimClipboard) { [weak self] in
+            self?.handleTrimClipboardHotkey()
         }
         self.handlerRegistered = true
     }
@@ -56,6 +74,12 @@ final class HotkeyManager: ObservableObject {
             KeyboardShortcuts.setShortcut(
                 .init(.v, modifiers: [.command, .option, .control]),
                 for: .typeTrimmed)
+        }
+
+        if KeyboardShortcuts.getShortcut(for: .trimClipboard) == nil {
+            KeyboardShortcuts.setShortcut(
+                .init(.t, modifiers: [.command, .shift]),
+                for: .trimClipboard)
         }
     }
 
@@ -85,6 +109,16 @@ final class HotkeyManager: ObservableObject {
         }
 
         return self.sender.type(text: textToType)
+    }
+
+    @discardableResult
+    private func handleTrimClipboardHotkey() -> Bool {
+        NSApp.activate(ignoringOtherApps: true)
+        let didTrim = self.monitor.trimClipboardIfNeeded(force: true)
+        if !didTrim {
+            self.monitor.lastSummary = "Clipboard not trimmed (nothing command-like detected)."
+        }
+        return didTrim
     }
 
     private func confirmLargePaste(lineCount: Int, preview: String) -> Bool {
