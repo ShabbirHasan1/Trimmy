@@ -6,6 +6,7 @@ import SwiftUI
 struct MenuContentView: View {
     @ObservedObject var monitor: ClipboardMonitor
     @ObservedObject var settings: AppSettings
+    @ObservedObject var hotkeyManager: HotkeyManager
     let updater: SPUStandardUpdaterController
 
     var body: some View {
@@ -13,6 +14,9 @@ struct MenuContentView: View {
             Toggle("Auto-Trim", isOn: self.$settings.autoTrimEnabled)
             Button("Trim Clipboard Now") {
                 self.monitor.trimClipboardIfNeeded(force: true)
+            }
+            Button("Type Trimmed Text Now") {
+                _ = self.hotkeyManager.typeTrimmedTextNow()
             }
             Text(self.lastText)
                 .foregroundStyle(.secondary)
@@ -34,6 +38,7 @@ struct MenuContentView: View {
                 }
                 Toggle("Keep blank lines", isOn: self.$settings.preserveBlankLines)
                 Toggle("Remove box drawing chars (│ │)", isOn: self.$settings.removeBoxDrawing)
+                Toggle("Enable global “Type Trimmed” hotkey", isOn: self.$settings.hotkeyEnabled)
                 Toggle("Launch at login", isOn: self.$settings.launchAtLogin)
                 Button("Trim Clipboard Now") {
                     self.monitor.trimClipboardIfNeeded(force: true)

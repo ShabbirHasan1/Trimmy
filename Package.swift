@@ -10,12 +10,14 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/sparkle-project/Sparkle", from: "2.8.1"),
+        .package(url: "https://github.com/sindresorhus/KeyboardShortcuts", from: "1.16.0"),
     ],
     targets: [
         .executableTarget(
             name: "Trimmy",
             dependencies: [
                 .product(name: "Sparkle", package: "Sparkle"),
+                .product(name: "KeyboardShortcuts", package: "KeyboardShortcuts"),
             ],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),

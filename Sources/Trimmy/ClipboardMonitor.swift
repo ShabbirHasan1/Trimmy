@@ -41,29 +41,10 @@ final class ClipboardMonitor: ObservableObject {
         let changeCount = self.pasteboard.changeCount
         self.lastSeenChangeCount = changeCount
 
-        guard let text = self.readTextFromPasteboard() else { return false }
-        guard self.settings.autoTrimEnabled || force else { return false }
-
-        var currentText = text
-        var wasTransformed = false
-
-        if let cleaned = self.detector.cleanBoxDrawingCharacters(currentText) {
-            currentText = cleaned
-            wasTransformed = true
-        }
-
-        if let commandTransformed = self.detector.transformIfCommand(currentText) {
-            currentText = commandTransformed
-            wasTransformed = true
-        } else if force {
-            if !wasTransformed, !text.contains("\\\n"), !text.contains("\n") { return false }
-        } else if !wasTransformed {
-            return false
-        }
-
-        self.writeTrimmed(currentText)
+        guard let trimmed = self.trimmedClipboardText(force: force) else { return false }
+        self.writeTrimmed(trimmed)
         self.lastSeenChangeCount = self.pasteboard.changeCount
-        self.updateSummary(with: currentText)
+        self.updateSummary(with: trimmed)
         return true
     }
 
@@ -94,6 +75,30 @@ final class ClipboardMonitor: ObservableObject {
     private func updateSummary(with text: String) {
         let singleLine = text.replacingOccurrences(of: "\n", with: " ")
         self.lastSummary = ClipboardMonitor.ellipsize(singleLine, limit: 90)
+    }
+
+    func trimmedClipboardText(force: Bool = false) -> String? {
+        guard let text = self.readTextFromPasteboard() else { return nil }
+        guard self.settings.autoTrimEnabled || force else { return nil }
+
+        var currentText = text
+        var wasTransformed = false
+
+        if let cleaned = self.detector.cleanBoxDrawingCharacters(currentText) {
+            currentText = cleaned
+            wasTransformed = true
+        }
+
+        if let commandTransformed = self.detector.transformIfCommand(currentText) {
+            currentText = commandTransformed
+            wasTransformed = true
+        } else if force {
+            if !wasTransformed, !text.contains("\\\n"), !text.contains("\n") { return nil }
+        } else if !wasTransformed {
+            return nil
+        }
+
+        return currentText
     }
 
     static func ellipsize(_ text: String, limit: Int) -> String {
