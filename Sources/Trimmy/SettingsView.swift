@@ -126,6 +126,11 @@ struct AggressivenessSettingsPane: View {
         VStack(alignment: .leading, spacing: 14) {
             AggressivenessRow(selection: self.$settings.aggressiveness)
 
+            Text("Automatic trimming uses this aggressiveness level. Manual “Trim Clipboard” always runs at High for maximum flattening.")
+                .font(.footnote)
+                .foregroundStyle(.tertiary)
+                .fixedSize(horizontal: false, vertical: true)
+
             AggressivenessPreview(
                 level: self.settings.aggressiveness,
                 preserveBlankLines: self.settings.preserveBlankLines,
@@ -257,7 +262,7 @@ struct HotkeySettingsPane: View {
             VStack(alignment: .leading, spacing: 6) {
                 KeyboardShortcuts.Recorder("", name: .trimClipboard)
                     .labelsHidden()
-                Text("Use this shortcut to trigger “Trim Clipboard” anywhere.")
+                Text("Manual trims ignore the Aggressiveness setting and always use High.")
                     .font(.footnote)
                     .foregroundStyle(.tertiary)
             }

@@ -18,7 +18,7 @@ struct CommandDetector {
         return trimmed == text ? nil : trimmed
     }
 
-    func transformIfCommand(_ text: String) -> String? {
+    func transformIfCommand(_ text: String, aggressivenessOverride: Aggressiveness? = nil) -> String? {
         guard text.contains("\n") else { return nil }
 
         let lines = text.split(whereSeparator: { $0.isNewline })
@@ -33,7 +33,8 @@ struct CommandDetector {
         if text.range(of: #"(?m)^\s*(sudo\s+)?[A-Za-z0-9./~_-]+"#, options: .regularExpression) != nil { score += 1 }
         if text.range(of: #"[-/]"#, options: .regularExpression) != nil { score += 1 }
 
-        guard score >= self.settings.aggressiveness.scoreThreshold else { return nil }
+        let aggressiveness = aggressivenessOverride ?? self.settings.aggressiveness
+        guard score >= aggressiveness.scoreThreshold else { return nil }
 
         let flattened = self.flatten(text)
         return flattened == text ? nil : flattened
