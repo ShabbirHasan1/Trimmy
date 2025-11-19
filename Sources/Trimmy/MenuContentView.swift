@@ -41,7 +41,7 @@ struct MenuContentView: View {
                 Toggle("Remove box drawing chars (│ │)", isOn: self.$settings.removeBoxDrawing)
                 Toggle("Enable global “Type Trimmed” hotkey", isOn: self.$settings.hotkeyEnabled)
                 Toggle("Launch at login", isOn: self.$settings.launchAtLogin)
-                Button("Trim Clipboard Now") {
+                Button("Trim Clipboard") {
                     self.monitor.trimClipboardIfNeeded(force: true)
                 }
                 if self.updater.isAvailable {

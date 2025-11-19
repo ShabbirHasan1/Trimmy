@@ -90,15 +90,33 @@ final class HotkeyManager: ObservableObject {
     private func confirmLargePaste(lineCount: Int, preview: String) -> Bool {
         let alert = NSAlert()
         alert.messageText = "Type \(lineCount) lines?"
-        alert.informativeText = """
-        You’re about to type \(lineCount) lines. Continue?
-
-        Preview:
-        \(Self.previewSnippet(for: preview))
-        """
+        alert.informativeText = "You’re about to type \(lineCount) lines. Preview below."
         alert.alertStyle = .warning
         alert.addButton(withTitle: "Type All")
         alert.addButton(withTitle: "Cancel")
+
+        let previewText = Self.previewSnippet(for: preview)
+        let textView = NSTextView(frame: .zero)
+        textView.string = previewText
+        textView.isEditable = false
+        textView.isSelectable = true
+        textView.drawsBackground = true
+        textView.backgroundColor = NSColor.textBackgroundColor
+        textView.font = NSFont.monospacedSystemFont(ofSize: 11, weight: .regular)
+        textView.textContainer?.lineFragmentPadding = 4
+        textView.textContainerInset = NSSize(width: 4, height: 4)
+        textView.translatesAutoresizingMaskIntoConstraints = false
+
+        let scroll = NSScrollView(frame: NSRect(x: 0, y: 0, width: 360, height: 120))
+        scroll.documentView = textView
+        scroll.hasVerticalScroller = true
+        scroll.borderType = .bezelBorder
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        scroll.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        scroll.widthAnchor.constraint(equalToConstant: 360).isActive = true
+
+        alert.accessoryView = scroll
+
         NSApp.activate(ignoringOtherApps: true)
         return alert.runModal() == .alertFirstButtonReturn
     }
@@ -126,10 +144,10 @@ final class HotkeyManager: ObservableObject {
 
     private static func previewSnippet(for text: String) -> String {
         let lines = text.split(whereSeparator: { $0.isNewline }).map(String.init)
-        let snippetLines = lines.prefix(3)
+        let snippetLines = lines.prefix(5)
         var snippet = snippetLines.joined(separator: "\n")
-        if snippet.count > 200 {
-            snippet = String(snippet.prefix(200)) + "…"
+        if snippet.count > 400 {
+            snippet = String(snippet.prefix(400)) + "…"
         }
         return snippet
     }
