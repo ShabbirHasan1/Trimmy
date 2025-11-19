@@ -7,7 +7,7 @@ struct MenuContentView: View {
     @ObservedObject var monitor: ClipboardMonitor
     @ObservedObject var settings: AppSettings
     @ObservedObject var hotkeyManager: HotkeyManager
-    let updater: SPUStandardUpdaterController
+    let updater: UpdaterProviding
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -43,9 +43,11 @@ struct MenuContentView: View {
                 Button("Trim Clipboard Now") {
                     self.monitor.trimClipboardIfNeeded(force: true)
                 }
-                Toggle("Automatically check for updates", isOn: self.autoUpdateBinding)
-                Button("Check for Updates…") {
-                    self.updater.checkForUpdates(nil)
+                if self.updater.isAvailable {
+                    Toggle("Automatically check for updates", isOn: self.autoUpdateBinding)
+                    Button("Check for Updates…") {
+                        self.updater.checkForUpdates(nil)
+                    }
                 }
             }
             Button("About Trimmy") {
@@ -62,8 +64,8 @@ struct MenuContentView: View {
 
     private var autoUpdateBinding: Binding<Bool> {
         Binding(
-            get: { self.updater.updater.automaticallyChecksForUpdates },
-            set: { self.updater.updater.automaticallyChecksForUpdates = $0 })
+            get: { self.updater.automaticallyChecksForUpdates },
+            set: { self.updater.automaticallyChecksForUpdates = $0 })
     }
 
     private func showAbout() {

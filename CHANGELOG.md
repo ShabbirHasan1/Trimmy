@@ -2,6 +2,7 @@
 
 ## Unreleased
 - New global hotkey (default ⌃⌥⌘V) that types the trimmed clipboard contents into any app, gated by a Settings toggle and customizable shortcut.
+- Sparkle updater now auto-disables for unsigned/dev runs (mirrors CodexBar) to avoid updater error dialogs during development.
 
 ## 0.2.4 — 2025-11-17
 - Last trim preview now middle-truncates long text so the menu stays compact while showing both start and end of the command.
