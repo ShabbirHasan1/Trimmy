@@ -90,7 +90,7 @@ final class HotkeyManager: ObservableObject {
     private func confirmLargePaste(lineCount: Int, preview: String) -> Bool {
         let alert = NSAlert()
         alert.messageText = "Type \(lineCount) lines?"
-        alert.informativeText = "You’re about to type \(lineCount) lines. Preview below."
+        alert.informativeText = "You’re about to type \(lineCount) lines."
         alert.alertStyle = .warning
         alert.addButton(withTitle: "Type All")
         alert.addButton(withTitle: "Cancel")
@@ -149,7 +149,7 @@ final class HotkeyManager: ObservableObject {
         }
     }
 
-    private static func previewSnippet(for text: String) -> String {
+    static func previewSnippet(for text: String) -> String {
         let lines = text.split(whereSeparator: { $0.isNewline }).map(String.init)
         let snippetLines = lines.prefix(1000)
         var snippet = snippetLines.joined(separator: "\n")
