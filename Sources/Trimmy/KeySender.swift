@@ -59,9 +59,9 @@ struct KeySender {
     }
 }
 
-private extension KeySender {
+extension KeySender {
     /// Base (non-shifted) characters → key codes.
-    static let baseMap: [Character: CGKeyCode] = [
+    fileprivate static let baseMap: [Character: CGKeyCode] = [
         "a": CGKeyCode(kVK_ANSI_A), "b": CGKeyCode(kVK_ANSI_B), "c": CGKeyCode(kVK_ANSI_C),
         "d": CGKeyCode(kVK_ANSI_D), "e": CGKeyCode(kVK_ANSI_E), "f": CGKeyCode(kVK_ANSI_F),
         "g": CGKeyCode(kVK_ANSI_G), "h": CGKeyCode(kVK_ANSI_H), "i": CGKeyCode(kVK_ANSI_I),
@@ -84,7 +84,7 @@ private extension KeySender {
     ]
 
     /// Shifted characters we need to map explicitly.
-    static let shiftedMap: [Character: (CGKeyCode, CGEventFlags)] = [
+    fileprivate static let shiftedMap: [Character: (CGKeyCode, CGEventFlags)] = [
         "!": (CGKeyCode(kVK_ANSI_1), .maskShift),
         "@": (CGKeyCode(kVK_ANSI_2), .maskShift),
         "#": (CGKeyCode(kVK_ANSI_3), .maskShift),

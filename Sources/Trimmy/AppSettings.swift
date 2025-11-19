@@ -41,6 +41,7 @@ final class AppSettings: ObservableObject {
     @AppStorage("launchAtLogin") var launchAtLogin: Bool = false {
         didSet { LaunchAtLoginManager.setEnabled(self.launchAtLogin) }
     }
+
     @AppStorage("hotkeyEnabled") var hotkeyEnabled: Bool = true {
         didSet { self.hotkeyEnabledChanged?(self.hotkeyEnabled) }
     }

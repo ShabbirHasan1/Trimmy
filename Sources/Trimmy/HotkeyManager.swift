@@ -35,7 +35,7 @@ final class HotkeyManager: ObservableObject {
 
     @discardableResult
     func typeTrimmedTextNow() -> Bool {
-        return self.handleHotkey()
+        self.handleHotkey()
     }
 
     private func registerHandlerIfNeeded() {
