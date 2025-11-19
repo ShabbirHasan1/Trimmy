@@ -179,7 +179,7 @@ struct AboutPane: View {
     @State private var autoCheckEnabled: Bool = false
     @State private var didLoadUpdaterState = false
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 6) {
             if let image = NSApplication.shared.applicationIconImage {
                 Button {
                     if let url = URL(string: "https://github.com/steipete/Trimmy") {
@@ -192,6 +192,7 @@ struct AboutPane: View {
                         .cornerRadius(16)
                         .scaleEffect(self.iconHover ? 1.07 : 1.0)
                         .shadow(color: self.iconHover ? .accentColor.opacity(0.25) : .clear, radius: 6)
+                        .padding(.bottom, 4)
                 }
                 .buttonStyle(.plain)
                 .onHover { hovering in
@@ -224,6 +225,7 @@ struct AboutPane: View {
             }
             .frame(maxWidth: .infinity)
             .multilineTextAlignment(.center)
+            .padding(.vertical, 10)
 
             if let updater {
                 Divider()
