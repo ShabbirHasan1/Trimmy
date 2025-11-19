@@ -103,7 +103,7 @@ Edit guidance: keep the actual tool list inside this `<tools></tools>` block so 
 # Repo-local notes
 - After making changes, always rebuild, run tests, package the app, and relaunch it (`swift build -q`, `swift test -q`, `Scripts/package_app.sh debug`, `open Trimmy.app`). When handing off, run the full reset one-liner so Trimmy restarts from the fresh bundle:
   ```bash
-  pkill -f "/Users/steipete/Projects/Trimmy/Trimmy.app/Contents/MacOS/Trimmy" || true && \
+  pkill -f "Trimmy.app/Contents/MacOS/Trimmy" || true && \
   swift build -q && swift test -q && Scripts/package_app.sh debug && open Trimmy.app
   ```
 - Past behavior: Settings tabs used to animate their height per tab (spring animation, `contentHeight` state, `SettingsTab.preferredHeight`). If we ever need that back, restore the old `contentHeight` state + `.frame(height:)` logic from git history (commit before 2025-11-19 ~18:40) while re-enabling the `preferredHeight` cases.
