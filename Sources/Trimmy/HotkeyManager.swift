@@ -78,7 +78,7 @@ final class HotkeyManager: ObservableObject {
 
         if KeyboardShortcuts.getShortcut(for: .trimClipboard) == nil {
             KeyboardShortcuts.setShortcut(
-                .init(.t, modifiers: [.command, .shift]),
+                .init(.t, modifiers: [.command, .option]),
                 for: .trimClipboard)
         }
     }
