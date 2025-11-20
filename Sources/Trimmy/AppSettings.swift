@@ -54,16 +54,10 @@ final class AppSettings: ObservableObject {
         didSet { LaunchAtLoginManager.setEnabled(self.launchAtLogin) }
     }
 
-    @AppStorage("hotkeyEnabled") var hotkeyEnabled: Bool = true {
-        didSet { self.hotkeyEnabledChanged?(self.hotkeyEnabled) }
-    }
-
     @AppStorage("trimHotkeyEnabled") var trimHotkeyEnabled: Bool = true {
         didSet { self.trimHotkeyEnabledChanged?(self.trimHotkeyEnabled) }
     }
 
-    /// Invoked whenever `hotkeyEnabled` flips; wired by `HotkeyManager`.
-    var hotkeyEnabledChanged: ((Bool) -> Void)?
     var trimHotkeyEnabledChanged: ((Bool) -> Void)?
 
     init() {

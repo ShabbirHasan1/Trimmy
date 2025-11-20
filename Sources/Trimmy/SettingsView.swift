@@ -1,4 +1,3 @@
-@preconcurrency import ApplicationServices
 import AppKit
 import KeyboardShortcuts
 import SwiftUI
@@ -113,15 +112,6 @@ struct GeneralSettingsPane: View {
                 subtitle: "Automatically opens the app when you start your Mac.",
                 binding: self.$settings.launchAtLogin)
 
-            HStack {
-                Spacer()
-                Button("Quit Trimmy") {
-                    NSApp.terminate(nil)
-                }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-            }
-            .padding(.top, 8)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 12)
@@ -269,44 +259,9 @@ struct AboutPane: View {
 struct HotkeySettingsPane: View {
     @ObservedObject var settings: AppSettings
     @ObservedObject var hotkeyManager: HotkeyManager
-    @State private var isAccessibilityTrusted = AXIsProcessTrusted()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
-            PreferenceToggleRow(
-                title: "Enable global “Type Trimmed” hotkey",
-                subtitle: "Lets you type the trimmed clipboard text anywhere via the shortcut.",
-                binding: self.$settings.hotkeyEnabled)
-
-            VStack(alignment: .leading, spacing: 6) {
-                KeyboardShortcuts.Recorder("", name: .typeTrimmed)
-                    .labelsHidden()
-                Text("Click to record a shortcut, then use it to type the latest trimmed clipboard text.")
-                    .font(.footnote)
-                    .foregroundStyle(.tertiary)
-            }
-
-            if !self.isAccessibilityTrusted, self.settings.hotkeyEnabled {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Accessibility permission required.")
-                        .font(.headline)
-                    Text("Trimmy needs Accessibility/Input Monitoring access so it can type on your behalf. Grant access once, then toggles stay enabled.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                    HStack(spacing: 12) {
-                        Button("Grant Access…") {
-                            self.promptForAccessibility()
-                        }
-                        Button("Open Privacy & Security…") {
-                            self.openAccessibilityPreferences()
-                        }
-                        .buttonStyle(.link)
-                    }
-                }
-                .padding(12)
-                .background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: 8))
-            }
-
             PreferenceToggleRow(
                 title: "Enable global “Trim Clipboard” hotkey",
                 subtitle: "Instantly trims the clipboard without opening the menu.",
@@ -330,44 +285,8 @@ struct HotkeySettingsPane: View {
             }
             .padding(.top, 8)
         }
-        .onChange(of: self.settings.hotkeyEnabled) { _, _ in
-            self.hotkeyManager.refreshRegistration()
-            self.refreshAccessibilityTrustStatus()
-        }
-        .onChange(of: self.settings.trimHotkeyEnabled) { _, _ in
-            self.hotkeyManager.refreshRegistration()
-        }
-        .onAppear {
-            self.refreshAccessibilityTrustStatus()
-        }
-        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
-            self.refreshAccessibilityTrustStatus()
-        }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 12)
-    }
-
-    private func promptForAccessibility() {
-        let options = [self.accessibilityPromptOptionKey(): true] as CFDictionary
-        AXIsProcessTrustedWithOptions(options)
-        self.refreshAccessibilityTrustStatus(after: 1.0)
-    }
-
-    private func openAccessibilityPreferences() {
-        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
-            NSWorkspace.shared.open(url)
-        }
-    }
-
-    private func refreshAccessibilityTrustStatus(after delay: TimeInterval = 0) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-            self.isAccessibilityTrusted = AXIsProcessTrusted()
-        }
-    }
-
-    @MainActor
-    private func accessibilityPromptOptionKey() -> String {
-        kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String
     }
 }
 

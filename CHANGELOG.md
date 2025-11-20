@@ -1,16 +1,14 @@
 # Changelog
 
 ## 0.3.0 — Unreleased
-- New global hotkey (default ⌃⌥⌘V) that types the trimmed clipboard contents into any app, gated by a Settings toggle and customizable shortcut.
 - Sparkle updater now auto-disables for unsigned/dev runs (mirrors CodexBar) to avoid updater error dialogs during development.
 - Debug builds now use bundle ID `com.steipete.trimmy.debug` and ship with Sparkle feed disabled, so Accessibility/Input Monitoring and updater prompts stay isolated from release builds.
-- Large-paste confirmation shows a selectable preview (up to 1000 lines, 50k chars) and confirms >20 lines before typing.
 - Preferences got the full SwiftUI treatment: toolbar tabs (General, Aggressiveness, Shortcuts, About), window auto-resizing per tab, and richer About content with dimmed update controls for debug builds.
-- Menu bar entry mirrors the new Settings window—actions for Trim Clipboard, Type Clipboard Text, Settings…, About Trimmy, plus a multi-line “Last” preview instead of the old submenu.
+- Menu bar entry mirrors the new Settings window—actions for Trim Clipboard, Settings…, About Trimmy, plus a multi-line “Last” preview instead of the old submenu.
 - Aggressiveness previews now ship with a more illustrative “Low” example and unit tests that lock behavior for all three levels.
 - Menu bar icon dims automatically when Auto-Trim is disabled so it’s obvious the service is paused.
-- Manual “Trim Clipboard” and its global shortcut now always run at High aggressiveness, while auto-trim honors the configured level; both shortcuts are fully configurable.
-- Hotkeys pane shows the actual shortcut glyphs, adds a quick Auto-Trim toggle in the menu, and includes an Accessibility banner with one-click prompts to grant Input Monitoring.
+- Manual “Trim Clipboard” and its global shortcut now always run at High aggressiveness, while auto-trim honors the configured level.
+- Hotkeys pane shows the actual shortcut glyphs, adds a quick Auto-Trim toggle in the menu, and includes an Accessibility banner with one-click prompts to grant Input Monitoring (typing hotkey removed).
 - Clipboard flattening now stitches path segments split across lines (e.g. `~/.ssh/\ngithub_rsa.pub`) without inserting stray spaces; applies to auto-trim (your set aggressiveness), manual trim (High), and the Aggressiveness preview examples.
 - Ship a proper SwiftUI Settings window (General/Aggressiveness/Shortcuts/About tabs) instead of ad-hoc menus, with consistent sizing, padding, and macOS-style controls.
 

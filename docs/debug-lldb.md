@@ -24,7 +24,6 @@ pkill -f \"Trimmy.app/Contents/MacOS/Trimmy\" || true
 - `DebugHooks.hotkeyManager?.trimClipboardNow()` calls the same path as the “Trim Clipboard” button/hotkey (force trim + summary update).
 - `DebugHooks.monitor?.lastSummary` reads the string shown under “Last:” in the menu.
 - You can clear/reset with `DebugHooks.monitor?.lastSummary = ""` if needed.
-- To simulate the “Type Clipboard Text” path instead, set the pasteboard and call `DebugHooks.hotkeyManager?.typeTrimmedTextNow()`.
 
 ## Breakpoints to inspect trimming
 Inside LLDB:
