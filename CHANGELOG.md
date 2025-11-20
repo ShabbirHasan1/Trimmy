@@ -4,6 +4,7 @@
 - Added “Paste Trimmed” action + global hotkey that trims on-the-fly (High aggressiveness), pastes, and restores your clipboard.
 - Added “Paste Original” action + hotkey so you can paste the untouched copy even after auto-trim; Trimmy now keeps the untrimmed text around for that path.
 - Paste actions now show the destination app (e.g., “Paste Trimmed to Ghostty”) so you know where the keystroke will land.
+- Box-drawing stripping now handles any number of leading/trailing gutter bars (│┃ etc., most-line majority) while leaving real pipeline `|` characters intact; more regression tests cover single-line, majority, and both-sides cases, and previews mirror the runtime cleaner.
 
 ## 0.3.0 — 2025-11-20
 - Preferences got the full SwiftUI treatment: toolbar tabs (General, Aggressiveness, Shortcuts, About), window auto-resizing per tab, and richer About content with dimmed update controls for debug builds.

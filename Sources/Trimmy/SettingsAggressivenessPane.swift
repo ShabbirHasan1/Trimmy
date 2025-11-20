@@ -99,7 +99,7 @@ enum AggressivenessPreviewEngine {
     {
         var text = sample
         if removeBoxDrawing {
-            text = text.replacingOccurrences(of: "│ │", with: " ")
+            text = CommandDetector.stripBoxDrawingCharacters(in: text) ?? text
         }
         let score = self.score(for: text)
         guard score >= level.scoreThreshold else { return text }

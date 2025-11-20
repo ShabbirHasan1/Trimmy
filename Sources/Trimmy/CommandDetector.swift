@@ -1,21 +1,75 @@
 import Foundation
 
+private let boxDrawingCharacterClass = "[│┃╎╏┆┇┊┋╽╿￨｜]"
+
 @MainActor
 struct CommandDetector {
     let settings: AppSettings
 
-    func cleanBoxDrawingCharacters(_ text: String) -> String? {
-        guard self.settings.removeBoxDrawing else { return nil }
-        let pattern = "│ │"
-        guard text.contains(pattern) else { return nil }
-        let cleaned = text.replacingOccurrences(of: pattern, with: " ")
+    nonisolated static func stripBoxDrawingCharacters(in text: String) -> String? {
+        var result = text
+
+        // Legacy mid-line cleanup for paired gutters that show up as "│ │".
+        if result.contains("│ │") {
+            result = result.replacingOccurrences(of: "│ │", with: " ")
+        }
+
+        let lines = result.split(omittingEmptySubsequences: false, whereSeparator: \.isNewline)
+        let nonEmptyLines = lines.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
+        if !nonEmptyLines.isEmpty {
+            let leadingPattern =
+                #"^\s*\#(boxDrawingCharacterClass)+ ?"# // strip 1..n leading bars plus following space
+            let trailingPattern =
+                #" ?\#(boxDrawingCharacterClass)+\s*$"# // strip 1..n trailing bars plus preceding space
+            let majorityThreshold = nonEmptyLines.count / 2 + 1 // strict majority
+
+            let leadingMatches = nonEmptyLines.count(where: {
+                $0.range(of: leadingPattern, options: .regularExpression) != nil
+            })
+            let trailingMatches = nonEmptyLines.count(where: {
+                $0.range(of: trailingPattern, options: .regularExpression) != nil
+            })
+
+            let stripLeading = leadingMatches >= majorityThreshold
+            let stripTrailing = trailingMatches >= majorityThreshold
+
+            if stripLeading || stripTrailing {
+                var rebuilt: [String] = []
+                rebuilt.reserveCapacity(lines.count)
+
+                for line in lines {
+                    var lineStr = String(line)
+                    if stripLeading {
+                        lineStr = lineStr.replacingOccurrences(
+                            of: leadingPattern,
+                            with: "",
+                            options: .regularExpression)
+                    }
+                    if stripTrailing {
+                        lineStr = lineStr.replacingOccurrences(
+                            of: trailingPattern,
+                            with: "",
+                            options: .regularExpression)
+                    }
+                    rebuilt.append(lineStr)
+                }
+
+                result = rebuilt.joined(separator: "\n")
+            }
+        }
+
         // Collapse any doubled spaces left behind after stripping the glyphs.
-        let collapsed = cleaned.replacingOccurrences(
+        let collapsed = result.replacingOccurrences(
             of: #" {2,}"#,
             with: " ",
             options: .regularExpression)
         let trimmed = collapsed.trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmed == text ? nil : trimmed
+    }
+
+    func cleanBoxDrawingCharacters(_ text: String) -> String? {
+        guard self.settings.removeBoxDrawing else { return nil }
+        return Self.stripBoxDrawingCharacters(in: text)
     }
 
     func transformIfCommand(_ text: String, aggressivenessOverride: Aggressiveness? = nil) -> String? {

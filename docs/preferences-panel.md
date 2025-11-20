@@ -66,7 +66,7 @@ struct GeneralSettingsPane: View {
 
             LabeledContent("Auto-trim") { Toggle("", isOn: $autoTrimEnabled) }
             LabeledContent("Keep blank lines") { Toggle("", isOn: $preserveBlankLines) }
-            LabeledContent("Remove box drawing chars (│ │)") { Toggle("", isOn: $removeBoxDrawing) }
+            LabeledContent("Remove box drawing chars (│┃)") { Toggle("", isOn: $removeBoxDrawing) }
             LabeledContent("Launch at login") { Toggle("", isOn: $launchAtLogin) }
         }
         .formStyle(.grouped)

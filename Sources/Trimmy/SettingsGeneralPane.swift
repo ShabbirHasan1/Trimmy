@@ -18,8 +18,8 @@ struct GeneralSettingsPane: View {
                 binding: self.$settings.preserveBlankLines)
 
             PreferenceToggleRow(
-                title: "Remove box drawing chars (│ │)",
-                subtitle: "Strip prompt-style box borders before trimming.",
+                title: "Remove box drawing chars (│┃)",
+                subtitle: "Strip prompt-style box gutters (any count, leading/trailing) before trimming.",
                 binding: self.$settings.removeBoxDrawing)
 
             PreferenceToggleRow(

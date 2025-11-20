@@ -227,6 +227,142 @@ struct TrimmyTests {
     }
 
     @Test
+    func stripsLeadingBoxRunsAcrossLines() {
+        let settings = AppSettings()
+        settings.removeBoxDrawing = true
+        settings.aggressiveness = .high
+        let detector = CommandDetector(settings: settings)
+        let text = """
+        │ ls -la \\
+        │   | grep '^d'
+        """
+        let cleaned = detector.cleanBoxDrawingCharacters(text)
+        #expect(cleaned == "ls -la \\\n | grep '^d'")
+        #expect(detector.transformIfCommand(cleaned ?? "") == "ls -la | grep '^d'")
+    }
+
+    @Test
+    func stripsTrailingBoxRunsAcrossLines() {
+        let settings = AppSettings()
+        settings.removeBoxDrawing = true
+        settings.aggressiveness = .high
+        let detector = CommandDetector(settings: settings)
+        let text = """
+        echo hi │
+        | tr h H │
+        """
+        let cleaned = detector.cleanBoxDrawingCharacters(text)
+        #expect(cleaned == "echo hi\n| tr h H")
+        #expect(detector.transformIfCommand(cleaned ?? "") == "echo hi | tr h H")
+    }
+
+    @Test
+    func stripsLeadingWhenMostLinesShareGutter() {
+        let settings = AppSettings()
+        settings.removeBoxDrawing = true
+        let detector = CommandDetector(settings: settings)
+        let text = """
+        │ echo hi
+        │ cat file
+        plain line
+        """
+        let cleaned = detector.cleanBoxDrawingCharacters(text)
+        #expect(cleaned == "echo hi\ncat file\nplain line")
+    }
+
+    @Test
+    func stripsTrailingWhenMostLinesShareGutter() {
+        let settings = AppSettings()
+        settings.removeBoxDrawing = true
+        let detector = CommandDetector(settings: settings)
+        let text = """
+        echo hi │
+        run thing │
+        plain line
+        """
+        let cleaned = detector.cleanBoxDrawingCharacters(text)
+        #expect(cleaned == "echo hi\nrun thing\nplain line")
+    }
+
+    @Test
+    func doesNotStripWhenGutterBelowMajority() {
+        let settings = AppSettings()
+        settings.removeBoxDrawing = true
+        let detector = CommandDetector(settings: settings)
+        let text = """
+        │ echo hi
+        plain line
+        plain line two
+        """
+        #expect(detector.cleanBoxDrawingCharacters(text) == nil)
+    }
+
+    @Test
+    func stripsSingleLineWithLeadingGutter() {
+        let settings = AppSettings()
+        settings.removeBoxDrawing = true
+        let detector = CommandDetector(settings: settings)
+        let text = "│ kubectl get pods"
+        #expect(detector.cleanBoxDrawingCharacters(text) == "kubectl get pods")
+    }
+
+    @Test
+    func stripsBothSidesWhenMostLinesDo() {
+        let settings = AppSettings()
+        settings.removeBoxDrawing = true
+        settings.aggressiveness = .high
+        let detector = CommandDetector(settings: settings)
+        let text = """
+        │ ls -la │
+        │   | grep '^d' │
+        plain line
+        """
+        let cleaned = detector.cleanBoxDrawingCharacters(text)
+        #expect(cleaned == "ls -la\n | grep '^d'\nplain line")
+        #expect(detector.transformIfCommand(cleaned ?? "") == "ls -la | grep '^d' plain line")
+    }
+
+    @Test
+    func ignoresGutterDetectionOnEmptyLines() {
+        let settings = AppSettings()
+        settings.removeBoxDrawing = true
+        let detector = CommandDetector(settings: settings)
+        let text = """
+
+        │ echo hi
+
+        │ cat file
+
+        """
+        let cleaned = detector.cleanBoxDrawingCharacters(text)
+        #expect(cleaned == "echo hi\n\ncat file")
+    }
+
+    @Test
+    func stripsLeadingAndTrailingBoxRunsWithMixedCounts() {
+        let settings = AppSettings()
+        settings.removeBoxDrawing = true
+        settings.aggressiveness = .high
+        let detector = CommandDetector(settings: settings)
+        let text = """
+        ││ curl https://example.com │
+        ││   | jq '.data' │
+        """
+        let cleaned = detector.cleanBoxDrawingCharacters(text)
+        #expect(cleaned == "curl https://example.com\n | jq '.data'")
+        #expect(detector.transformIfCommand(cleaned ?? "") == "curl https://example.com | jq '.data'")
+    }
+
+    @Test
+    func doesNotStripMidLineBoxGlyphsWithoutSharedGutter() {
+        let settings = AppSettings()
+        settings.removeBoxDrawing = true
+        let detector = CommandDetector(settings: settings)
+        let text = "echo │hi│ there"
+        #expect(detector.cleanBoxDrawingCharacters(text) == nil)
+    }
+
+    @Test
     func boxDrawingRemovalDoesNotStripLegitPipes() {
         let settings = AppSettings()
         settings.removeBoxDrawing = true
