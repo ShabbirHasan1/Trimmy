@@ -2,6 +2,9 @@
 
 SwiftPM only; manual package/sign/notarize. Sparkle feed served from GitHub Releases.
 
+## Expectations
+- When asked to “release” a version, execute the full, end-to-end flow: bump versions/CHANGELOG, build, sign & notarize, upload the zip to the GitHub release, generate/update the appcast with the new signature, publish the release/tag, and verify the enclosure downloads successfully via HTTP (no 404s) and installs.
+
 ## Prereqs
 - Xcode 26+ installed at `/Applications/Xcode.app` (for ictool/iconutil and SDKs).
 - Developer ID Application cert installed: `Developer ID Application: Peter Steinberger (Y5PE65HELJ)`.
