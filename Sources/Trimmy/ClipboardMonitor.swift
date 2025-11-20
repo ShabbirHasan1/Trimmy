@@ -1,7 +1,6 @@
 import AppKit
 import Carbon.HIToolbox
 import Foundation
-import SwiftUI
 
 @MainActor
 final class ClipboardMonitor: ObservableObject {
@@ -223,6 +222,16 @@ extension ClipboardMonitor {
         let trimmed = self.lastTrimmedText ?? original
         return ClipboardMonitor.struck(original: original, trimmed: trimmed)
     }
+
+    func trimmedPreviewText() -> String {
+        if let trimmed = self.lastTrimmedText {
+            return ClipboardMonitor.displayString(trimmed)
+        }
+        if !self.lastSummary.isEmpty {
+            return ClipboardMonitor.displayString(self.lastSummary)
+        }
+        return "No trimmed text yet"
+    }
 }
 
 // MARK: - Helpers
@@ -376,9 +385,7 @@ extension ClipboardMonitor {
     }
 
     private func registerTrimEvent() {
-        withAnimation(.easeOut(duration: 0.18)) {
-            self.trimPulseID &+= 1
-        }
+        self.trimPulseID &+= 1
     }
 }
 

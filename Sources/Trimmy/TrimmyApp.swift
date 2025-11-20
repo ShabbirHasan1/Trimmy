@@ -76,7 +76,6 @@ private struct ScissorStatusLabel: View {
         Label("Trimmy", systemImage: "scissors")
             .symbolRenderingMode(.hierarchical)
             .symbolEffect(.pulse, options: .repeat(1).speed(1.15), value: self.monitor.trimPulseID)
-            .animation(.easeOut(duration: 0.2), value: self.monitor.trimPulseID)
             .foregroundStyle(self.isEnabled ? AnyShapeStyle(.primary) : AnyShapeStyle(.secondary))
             .opacity(self.isEnabled ? 1.0 : 0.45)
     }

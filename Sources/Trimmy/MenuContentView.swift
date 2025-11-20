@@ -20,13 +20,6 @@ struct MenuContentView: View {
             .toggleStyle(.checkbox)
 
             self.pasteButtons
-            self.previewLine
-                .font(.caption2).monospaced()
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
-                .fixedSize(horizontal: false, vertical: true)
-                .truncationMode(.middle)
-                .frame(maxWidth: 260, alignment: .leading)
             Divider()
             Button("Settings…") {
                 self.open(tab: .general)
@@ -111,11 +104,25 @@ extension MenuContentView {
                 self.handlePasteTrimmed()
             }
             .applyKeyboardShortcut(self.pasteTrimmedKeyboardShortcut)
+            Text(self.trimmedPreviewLine)
+                .font(.caption2).monospaced()
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .truncationMode(.middle)
+                .frame(maxWidth: 260, alignment: .leading)
 
             Button("Paste Original to \(self.targetAppLabel)") {
                 self.handlePasteOriginal()
             }
             .applyKeyboardShortcut(self.pasteOriginalKeyboardShortcut)
+            Text(self.monitor.struckOriginalPreview())
+                .font(.caption2).monospaced()
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .truncationMode(.middle)
+                .frame(maxWidth: 260, alignment: .leading)
         }
     }
 
@@ -129,6 +136,10 @@ extension MenuContentView {
         guard self.settings.pasteOriginalHotkeyEnabled,
               let shortcut = KeyboardShortcuts.getShortcut(for: .pasteOriginal) else { return nil }
         return shortcut.swiftUIShortcut
+    }
+
+    private var trimmedPreviewLine: String {
+        ClipboardMonitor.ellipsize(self.monitor.trimmedPreviewText(), limit: 260)
     }
 }
 
