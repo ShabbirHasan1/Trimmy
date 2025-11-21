@@ -138,7 +138,7 @@ extension MenuContentView {
     }
 
     private var trimmedPreviewLine: String {
-        ClipboardMonitor.ellipsize(self.monitor.trimmedPreviewText(), limit: 260)
+        ClipboardMonitor.ellipsize(self.monitor.trimmedPreviewText(), limit: 50)
     }
 
     private var trimmedStatsSuffix: String {
@@ -151,7 +151,7 @@ extension MenuContentView {
 
     private func statsSuffix(for text: String?) -> String {
         guard let text else { return "" }
-        return PreviewMetrics.charCountSuffix(count: text.count)
+        return PreviewMetrics.charCountSuffix(count: text.count, limit: 50)
     }
 }
 
