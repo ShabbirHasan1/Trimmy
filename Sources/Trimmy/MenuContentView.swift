@@ -152,9 +152,13 @@ extension MenuContentView {
     private func statsSuffix(for text: String?) -> String {
         guard let text else { return "" }
         let chars = text.count
-        let kb = Double(text.utf8.count) / 1024.0
-        let kbString = kb >= 0.1 ? String(format: "%.1fk", kb) : "<0.1k"
-        return " (\(chars) chars · \(kbString))"
+        if chars >= 1000 {
+            let k = Double(chars) / 1000.0
+            let formatted = k >= 10 ? String(format: "%.0fk", k) : String(format: "%.1fk", k)
+            return " (\(formatted) chars)"
+        } else {
+            return " (\(chars) chars)"
+        }
     }
 }
 
