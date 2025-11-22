@@ -25,7 +25,7 @@ struct AboutPane: View {
     }
 
     @State private var iconHover: Bool = false
-    @State private var autoCheckEnabled: Bool = false
+    @AppStorage("autoUpdateEnabled") private var autoCheckEnabled: Bool = true
     @State private var didLoadUpdaterState = false
     var body: some View {
         VStack(spacing: 6) {
@@ -108,7 +108,8 @@ struct AboutPane: View {
         .padding(.bottom, 24)
         .onAppear {
             guard let updater, !self.didLoadUpdaterState else { return }
-            self.autoCheckEnabled = updater.automaticallyChecksForUpdates
+            // Ensure Sparkle matches the persisted preference on first load.
+            updater.automaticallyChecksForUpdates = self.autoCheckEnabled
             self.didLoadUpdaterState = true
         }
         .onChange(of: self.autoCheckEnabled) { _, newValue in
