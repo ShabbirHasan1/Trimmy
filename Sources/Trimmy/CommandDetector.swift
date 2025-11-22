@@ -72,6 +72,32 @@ struct CommandDetector {
         return Self.stripBoxDrawingCharacters(in: text)
     }
 
+    func stripPromptPrefixes(_ text: String) -> String? {
+        let lines = text.split(omittingEmptySubsequences: false, whereSeparator: \.isNewline)
+        let nonEmptyLines = lines.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
+        guard !nonEmptyLines.isEmpty else { return nil }
+
+        var strippedCount = 0
+        var rebuilt: [String] = []
+        rebuilt.reserveCapacity(lines.count)
+
+        for line in lines {
+            if let stripped = self.stripPrompt(in: line) {
+                strippedCount += 1
+                rebuilt.append(stripped)
+            } else {
+                rebuilt.append(String(line))
+            }
+        }
+
+        let majorityThreshold = nonEmptyLines.count / 2 + 1
+        let shouldStrip = nonEmptyLines.count == 1 ? strippedCount == 1 : strippedCount >= majorityThreshold
+        guard shouldStrip else { return nil }
+
+        let result = rebuilt.joined(separator: "\n")
+        return result == text ? nil : result
+    }
+
     func transformIfCommand(_ text: String, aggressivenessOverride: Aggressiveness? = nil) -> String? {
         guard text.contains("\n") else { return nil }
 
@@ -114,6 +140,36 @@ struct CommandDetector {
         if line.last == "." { return false }
         let pattern = #"^(sudo\s+)?[A-Za-z0-9./~_-]+(?:\s+|\z)"#
         return line.range(of: pattern, options: .regularExpression) != nil
+    }
+
+    private func stripPrompt(in line: Substring) -> String? {
+        let leadingWhitespace = line.prefix { $0.isWhitespace }
+        let remainder = line.dropFirst(leadingWhitespace.count)
+
+        guard let first = remainder.first, first == "#" || first == "$" else { return nil }
+
+        let afterPrompt = remainder.dropFirst().drop { $0.isWhitespace }
+        guard self.isLikelyPromptCommand(afterPrompt) else { return nil }
+
+        return String(leadingWhitespace) + String(afterPrompt)
+    }
+
+    private func isLikelyPromptCommand(_ content: Substring) -> Bool {
+        let trimmed = String(content.trimmingCharacters(in: .whitespaces))
+        guard !trimmed.isEmpty else { return false }
+        if let last = trimmed.last, [".", "?", "!"].contains(last) { return false }
+
+        let hasCommandPunctuation = trimmed.contains(where: { "-./~$".contains($0) }) || trimmed.contains(where: \.isNumber)
+        let firstToken = trimmed.split(separator: " ").first?.lowercased() ?? ""
+        let knownPrefixes = [
+            "sudo", "./", "~/", "apt", "brew", "git", "python", "pip", "pnpm", "npm", "yarn", "cargo",
+            "bundle", "rails", "go", "make", "xcodebuild", "swift", "kubectl", "docker", "podman", "aws",
+            "gcloud", "az",
+        ]
+        let startsWithKnown = knownPrefixes.contains(where: { firstToken.hasPrefix($0) })
+
+        guard hasCommandPunctuation || startsWithKnown else { return false }
+        return self.isLikelyCommandLine(trimmed[...])
     }
 
     private func isLikelySourceCode(_ text: String) -> Bool {

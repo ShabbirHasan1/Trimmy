@@ -460,4 +460,48 @@ struct TrimmyTests {
         let text = "short preview"
         #expect(ClipboardMonitor.ellipsize(text, limit: 90) == text)
     }
+
+    @Test
+    func stripsPromptFromSingleLineCommand() {
+        let settings = AppSettings()
+        settings.aggressiveness = .normal
+        let detector = CommandDetector(settings: settings)
+        let text = "# some-cli hello"
+        #expect(detector.stripPromptPrefixes(text) == "some-cli hello")
+    }
+
+    @Test
+    func doesNotStripMarkdownHeading() {
+        let settings = AppSettings()
+        settings.aggressiveness = .normal
+        let detector = CommandDetector(settings: settings)
+        #expect(detector.stripPromptPrefixes("# Release Notes") == nil)
+    }
+
+    @Test
+    func stripsPromptAcrossMajorityOfLines() {
+        let settings = AppSettings()
+        settings.aggressiveness = .normal
+        let detector = CommandDetector(settings: settings)
+        let text = """
+        # brew install foo
+        # brew install bar
+        notes stay
+        """
+        #expect(
+            detector.stripPromptPrefixes(text)
+                == "brew install foo\nbrew install bar\nnotes stay")
+    }
+
+    @Test
+    func doesNotStripPromptWhenOnlyOneLineLooksLikeHeading() {
+        let settings = AppSettings()
+        settings.aggressiveness = .normal
+        let detector = CommandDetector(settings: settings)
+        let text = """
+        # Release notes
+        brew install foo
+        """
+        #expect(detector.stripPromptPrefixes(text) == nil)
+    }
 }

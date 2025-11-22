@@ -285,6 +285,11 @@ extension ClipboardMonitor {
             wasTransformed = true
         }
 
+        if let promptStripped = self.detector.stripPromptPrefixes(currentText) {
+            currentText = promptStripped
+            wasTransformed = true
+        }
+
         let overrideAggressiveness: Aggressiveness? = force ? .high : nil
 
         if let commandTransformed = self.detector.transformIfCommand(
