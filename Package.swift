@@ -11,7 +11,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/sparkle-project/Sparkle", from: "2.8.1"),
         .package(url: "https://github.com/sindresorhus/KeyboardShortcuts", from: "1.16.0"),
-        .package(url: "https://github.com/orchetect/MenuBarExtraAccess", from: "1.0.0"),
+        .package(url: "https://github.com/orchetect/MenuBarExtraAccess", exact: "1.2.1"),
     ],
     targets: [
         .executableTarget(
