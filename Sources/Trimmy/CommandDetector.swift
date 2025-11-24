@@ -98,6 +98,27 @@ struct CommandDetector {
         return result == text ? nil : result
     }
 
+    func repairWrappedURL(_ text: String) -> String? {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let lowercased = trimmed.lowercased()
+        let schemeCount = (lowercased.components(separatedBy: "https://").count - 1)
+            + (lowercased.components(separatedBy: "http://").count - 1)
+        guard schemeCount == 1 else { return nil }
+        guard lowercased.hasPrefix("http://") || lowercased.hasPrefix("https://") else { return nil }
+
+        let collapsed = trimmed.replacingOccurrences(
+            of: #"\s+"#,
+            with: "",
+            options: .regularExpression)
+
+        guard collapsed != trimmed else { return nil }
+
+        let validURLPattern = #"^https?://[A-Za-z0-9._~:/?#\[\]@!$&'()*+,;=%-]+$"#
+        guard collapsed.range(of: validURLPattern, options: .regularExpression) != nil else { return nil }
+
+        return collapsed
+    }
+
     func transformIfCommand(_ text: String, aggressivenessOverride: Aggressiveness? = nil) -> String? {
         guard text.contains("\n") else { return nil }
 

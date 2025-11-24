@@ -290,6 +290,11 @@ extension ClipboardMonitor {
             wasTransformed = true
         }
 
+        if let repairedURL = self.detector.repairWrappedURL(currentText) {
+            currentText = repairedURL
+            wasTransformed = true
+        }
+
         let overrideAggressiveness: Aggressiveness? = force ? .high : nil
 
         if let commandTransformed = self.detector.transformIfCommand(

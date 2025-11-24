@@ -65,6 +65,38 @@ struct TrimmyTests {
     }
 
     @Test
+    func repairWrappedURLStripsInternalWhitespace() {
+        let settings = AppSettings()
+        let detector = CommandDetector(settings: settings)
+        let url = "https://example.com/some-\n path?foo=1&bar= two"
+        #expect(detector.repairWrappedURL(url) == "https://example.com/some-path?foo=1&bar=two")
+    }
+
+    @Test
+    func repairWrappedURLNoopWhenAlreadyTight() {
+        let settings = AppSettings()
+        let detector = CommandDetector(settings: settings)
+        let url = "https://example.com/already-clean?x=1"
+        #expect(detector.repairWrappedURL(url) == nil)
+    }
+
+    @Test
+    func repairWrappedURLRejectsMultipleSchemes() {
+        let settings = AppSettings()
+        let detector = CommandDetector(settings: settings)
+        let text = "https://one.com http://two.com"
+        #expect(detector.repairWrappedURL(text) == nil)
+    }
+
+    @Test
+    func repairWrappedURLRejectsWhenNoScheme() {
+        let settings = AppSettings()
+        let detector = CommandDetector(settings: settings)
+        let text = "example.com/foo bar"
+        #expect(detector.repairWrappedURL(text) == nil)
+    }
+
+    @Test
     func collapsesBlankLinesWhenNotPreserved() {
         let settings = AppSettings()
         settings.preserveBlankLines = false

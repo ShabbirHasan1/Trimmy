@@ -90,6 +90,49 @@ struct ClipboardMonitorTests {
     }
 
     @Test
+    func repairsWrappedURLEvenWhenAggressivenessIsLow() {
+        let settings = AppSettings()
+        settings.aggressiveness = .low
+        settings.autoTrimEnabled = true
+        let pasteboard = makeTestPasteboard()
+        let monitor = ClipboardMonitor(settings: settings, pasteboard: pasteboard)
+
+        let expectedURL =
+            "https://github.blog/changelog/2025-07-14-"
+                + "pkce-support-for-oauth-and-github-app-authentication?utm_source=openai"
+
+        pasteboard.setString(
+            """
+            https://github.blog/changelog/2025-07-14-
+            pkce-support-for-oauth-and-github-app-authentication?utm_source=openai
+            """,
+            forType: .string)
+
+        let didTrim = monitor.trimClipboardIfNeeded(force: false)
+        #expect(didTrim)
+        #expect(pasteboard.string(forType: .string) == expectedURL)
+    }
+
+    @Test
+    func leavesMultipleSeparateUrlsUntouched() {
+        let settings = AppSettings()
+        settings.aggressiveness = .low
+        settings.autoTrimEnabled = true
+        let pasteboard = makeTestPasteboard()
+        let monitor = ClipboardMonitor(settings: settings, pasteboard: pasteboard)
+
+        let twoUrls = """
+        https://example.com/foo
+        https://example.com/bar
+        """
+        pasteboard.setString(twoUrls, forType: .string)
+
+        let didTrim = monitor.trimClipboardIfNeeded(force: false)
+        #expect(didTrim == false)
+        #expect(pasteboard.string(forType: .string) == twoUrls)
+    }
+
+    @Test
     func pasteTrimmedKeepsOriginalForLater() {
         let settings = AppSettings()
         settings.autoTrimEnabled = false
