@@ -58,14 +58,7 @@ struct AboutPane: View {
                     .foregroundStyle(.secondary)
                 if let buildTimestamp {
                     let git = Bundle.main.object(forInfoDictionaryKey: "TrimmyGitCommit") as? String
-                    var suffix = ""
-                    if let git, !git.isEmpty, git != "unknown" {
-                        suffix = " (\(git)"
-                        #if DEBUG
-                        suffix += " DEBUG BUILD"
-                        #endif
-                        suffix += ")"
-                    }
+                    let suffix = Self.buildSuffix(for: git)
                     Text("Built \(buildTimestamp)\(suffix)")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
@@ -124,6 +117,18 @@ struct AboutPane: View {
         .onChange(of: self.autoCheckEnabled) { _, newValue in
             self.updater?.automaticallyChecksForUpdates = newValue
         }
+    }
+
+    private static func buildSuffix(for gitCommit: String?) -> String {
+        guard let gitCommit, !gitCommit.isEmpty, gitCommit != "unknown" else { return "" }
+
+        var suffix = " (\(gitCommit)"
+        #if DEBUG
+        suffix += " DEBUG BUILD"
+        #endif
+        suffix += ")"
+
+        return suffix
     }
 }
 
