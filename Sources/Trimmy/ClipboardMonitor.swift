@@ -220,7 +220,7 @@ extension ClipboardMonitor {
             return AttributedString(self.lastSummary.isEmpty ? "No actions yet" : self.lastSummary)
         }
         let trimmed = self.lastTrimmedText ?? original
-        return ClipboardMonitor.struck(original: original, trimmed: trimmed, limit: nil)
+        return ClipboardMonitor.struck(original: original, trimmed: trimmed)
     }
 
     func trimmedPreviewText() -> String {
@@ -364,39 +364,33 @@ extension ClipboardMonitor {
         up?.post(tap: .cghidEventTap)
     }
 
-    static func struck(original: String, trimmed: String, limit: Int? = nil) -> AttributedString {
-        let baseOriginal = PreviewMetrics.displayStringWithVisibleWhitespace(original)
-        let baseTrimmed = PreviewMetrics.displayStringWithVisibleWhitespace(trimmed)
-        let displayOriginal = baseOriginal
-        let displayTrimmed = baseTrimmed
-        let base = NSMutableAttributedString(string: baseOriginal)
+    static func struck(original: String, trimmed: String, limit _: Int? = nil) -> AttributedString {
+        let o = Array(original)
+        let t = Array(trimmed)
 
-        // Two-pointer diff so we only strike characters that are truly removed,
-        // instead of allowing the longest-common-subsequence algorithm to
-        // rematch identical symbols later in the string (which can hide removed
-        // box-drawing/pipe glyphs when another pipe remains).
-        let o = Array(displayOriginal)
-        let t = Array(displayTrimmed)
+        // Two-pointer diff on the raw strings (no ellipsizing, no visible whitespace yet).
         var i = 0
         var j = 0
-        var removed = [Int]()
+        var removedFlags = Array(repeating: false, count: o.count)
 
         while i < o.count, j < t.count {
             if o[i] == t[j] {
                 i += 1
                 j += 1
             } else {
-                removed.append(i)
+                removedFlags[i] = true
                 i += 1
             }
         }
-        // Anything left in the original after the trimmed string ends was removed.
         while i < o.count {
-            removed.append(i)
+            removedFlags[i] = true
             i += 1
         }
 
-        for idx in removed where idx < base.length {
+        let (mappedString, mappedFlags) = PreviewMetrics.mapToVisibleWhitespace(String(o), removed: removedFlags)
+        let base = NSMutableAttributedString(string: mappedString)
+
+        for (idx, isRemoved) in mappedFlags.enumerated() where isRemoved {
             base.addAttributes([
                 .strikethroughStyle: NSUnderlineStyle.single.rawValue,
             ], range: NSRange(location: idx, length: 1))

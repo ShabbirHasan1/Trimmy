@@ -43,6 +43,25 @@ enum PreviewMetrics {
             .replacingOccurrences(of: "\n", with: "⏎")
     }
 
+    /// Map a source string to a visible-whitespace string while carrying per-character flags.
+    /// Each source character expands to exactly one visible character so indices stay aligned.
+    static func mapToVisibleWhitespace(_ text: String, removed: [Bool]) -> (String, [Bool]) {
+        precondition(text.count == removed.count, "removed flags must match character count")
+        var mapped = ""
+        var mappedRemoved: [Bool] = []
+        for (ch, flag) in zip(text, removed) {
+            let out: Character = switch ch {
+            case " ": "·"
+            case "\t": "⇥"
+            case "\n": "⏎"
+            default: ch
+            }
+            mapped.append(out)
+            mappedRemoved.append(flag)
+        }
+        return (mapped, mappedRemoved)
+    }
+
     private static func truncationCount(for count: Int, limit: Int) -> Int {
         guard count > limit, limit > 0 else { return 0 }
         return (count + limit - 1) / limit - 1
