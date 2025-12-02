@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trimmy — Paste once, run once</title>
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --card: #111319;
+      --text: #f5f7ff;
+      --muted: #9aa4b5;
+      --accent: #6ae3ff;
+      --border: #1c1f29;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+      --radius: 18px;
+      --maxw: 1180px;
+      --mono: "SFMono-Regular", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: "Inter", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px;
+      background: radial-gradient(circle at 20% 20%, rgba(106, 227, 255, 0.12), transparent 25%),
+                  radial-gradient(circle at 80% 10%, rgba(106, 227, 255, 0.08), transparent 22%),
+                  var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      display: flex;
+      justify-content: center;
+    }
+    main {
+      max-width: var(--maxw);
+      width: 100%;
+      padding: 28px;
+      background: linear-gradient(145deg, #0f1118 0%, #0b0d13 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    header {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #6ae3ff, #2bc4f7);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      color: #04232f;
+      box-shadow: 0 10px 30px rgba(106, 227, 255, 0.35);
+    }
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+    }
+    p.lede {
+      margin: 0 0 18px 0;
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 720px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin: 24px 0;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+    }
+    .card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.4;
+      font-size: 14px;
+    }
+    .shots {
+      display: grid;
+      gap: 18px;
+    }
+    .shot {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px;
+      box-shadow: var(--shadow);
+    }
+    .shot img {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+    }
+    .cta {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 1px solid #2bc4f7;
+      color: var(--text);
+      text-decoration: none;
+      background: linear-gradient(135deg, rgba(106, 227, 255, 0.18), rgba(43, 196, 247, 0.14));
+      box-shadow: 0 12px 30px rgba(106, 227, 255, 0.25);
+      font-weight: 600;
+    }
+    .meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 10px;
+    }
+    code {
+      font-family: var(--mono);
+      background: #0f141d;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      color: #b5c7ff;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="logo">✂️</div>
+      <div>
+        <h1>Trimmy — Paste once, run once</h1>
+        <p class="lede">Trimmy flattens multi‑line shell snippets you copy so they paste and execute cleanly. Two menu actions: Paste Trimmed (with “X trimmed” badge) and Paste Original.</p>
+        <a class="cta" href="https://github.com/steipete/Trimmy/releases/latest">Download latest release</a>
+        <div class="meta">
+          <span>macOS 15+</span>
+          <span>Swift 6 · Sparkle updates</span>
+          <span>Menu bar, no Dock icon</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <h2>What it does</h2>
+        <ul>
+          <li>Detects shell-like copies and flattens newlines (respects <code>\</code> continuations).</li>
+          <li>Strips prompt gutters and decorative box glyphs (│) that terminal UIs inject.</li>
+          <li>Shows “X trimmed” on Paste Trimmed; Paste Original leaves your copy untouched.</li>
+          <li>Three aggressiveness levels + toggles for blank lines and box stripping.</li>
+          <li>Global hotkeys for both trimmed and original paste paths.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Why it’s handy</h2>
+        <ul>
+          <li>Run docs/ChatGPT snippets without hand-editing line wraps.</li>
+          <li>Fixes terminal-wrapped URLs and pipelines that pick up stray box characters.</li>
+          <li>Menu previews show target app and what will be pasted.</li>
+          <li>Sparkle updates keep you current; launch-at-login available.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="shots">
+      <div class="shot"><img src="../trimmy.png" alt="Trimmy menu showcasing Paste Trimmed and Paste Original"></div>
+      <div class="shot"><img src="../term-example.png" alt="Terminal example showing trimmed command output"></div>
+    </div>
+  </main>
+</body>
+</html>
