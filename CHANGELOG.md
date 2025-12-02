@@ -1,6 +1,9 @@
 # Changelog
 
-## 0.5.0 — Unreleased
+## 0.5.1 — Unreleased
+- _TBD_
+
+## 0.5.0 — 2025-12-02
 - Added headless CLI (`TrimmyCLI`) with `--trim` flag, sharing the same heuristics; supports stdin, json output, aggressiveness/blank-line/box-drawing options.
 - Fixed strike-through preview: removed decorative pipes (│) now strike correctly, whitespace deletions show as struck dots, and truncation no longer hides removed characters.
 
