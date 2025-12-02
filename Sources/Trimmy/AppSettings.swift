@@ -1,9 +1,9 @@
 import ServiceManagement
 import SwiftUI
 
-enum Aggressiveness: String, CaseIterable, Identifiable, Codable {
+public enum Aggressiveness: String, CaseIterable, Identifiable, Codable, Sendable {
     case low, normal, high
-    var id: String { rawValue }
+    public var id: String { rawValue }
 
     var scoreThreshold: Int {
         switch self {
@@ -15,7 +15,7 @@ enum Aggressiveness: String, CaseIterable, Identifiable, Codable {
 }
 
 extension Aggressiveness {
-    var title: String {
+    public var title: String {
         switch self {
         case .low: "Low (safer)"
         case .normal: "Normal"
@@ -23,7 +23,7 @@ extension Aggressiveness {
         }
     }
 
-    var titleShort: String {
+    public var titleShort: String {
         switch self {
         case .low: "Low"
         case .normal: "Normal"
@@ -32,7 +32,7 @@ extension Aggressiveness {
     }
 
     /// Short helper text shown under the radio group.
-    var blurb: String {
+    public var blurb: String {
         switch self {
         case .low:
             "Keeps light multi-line snippets intact unless they clearly look like shell commands."
@@ -45,11 +45,11 @@ extension Aggressiveness {
 }
 
 @MainActor
-final class AppSettings: ObservableObject {
-    @AppStorage("aggressiveness") var aggressiveness: Aggressiveness = .normal
-    @AppStorage("preserveBlankLines") var preserveBlankLines: Bool = false
-    @AppStorage("autoTrimEnabled") var autoTrimEnabled: Bool = true
-    @AppStorage("removeBoxDrawing") var removeBoxDrawing: Bool = true
+public final class AppSettings: ObservableObject {
+    @AppStorage("aggressiveness") public var aggressiveness: Aggressiveness = .normal
+    @AppStorage("preserveBlankLines") public var preserveBlankLines: Bool = false
+    @AppStorage("autoTrimEnabled") public var autoTrimEnabled: Bool = true
+    @AppStorage("removeBoxDrawing") public var removeBoxDrawing: Bool = true
     @AppStorage("usePasteboardFallbacks") var usePasteboardFallbacks: Bool = false
     @AppStorage("launchAtLogin") var launchAtLogin: Bool = false {
         didSet { LaunchAtLoginManager.setEnabled(self.launchAtLogin) }
@@ -75,7 +75,7 @@ final class AppSettings: ObservableObject {
     @AppStorage("debugPaneEnabled") var debugPaneEnabled: Bool = false
     #endif
 
-    init() {
+    public init() {
         LaunchAtLoginManager.setEnabled(self.launchAtLogin)
     }
 }

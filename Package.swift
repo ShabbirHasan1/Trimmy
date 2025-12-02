@@ -24,6 +24,20 @@ let package = Package(
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
+        .executableTarget(
+            name: "TrimmyCLI",
+            dependencies: [
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+            ]),
+        .testTarget(
+            name: "TrimmyCLITests",
+            dependencies: ["TrimmyCLI"],
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency"),
+                .enableExperimentalFeature("SwiftTesting"),
+            ]),
         .testTarget(
             name: "TrimmyTests",
             dependencies: ["Trimmy"],

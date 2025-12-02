@@ -56,6 +56,27 @@ Get the precompiled binary from [Releases](https://github.com/steipete/Trimmy/re
 2. Bundle: `./Scripts/package_app.sh release` → `Trimmy.app`.
 3. Launch: open `Trimmy.app` (or add to Login Items). Menu shows Auto-Trim toggle, Aggressiveness submenu, Keep blank lines toggle, Paste Trimmed/Paste Original actions, and a last-action status.
 
+## Headless trimming (CLI)
+Use the bundled CLI to trim text without launching the UI:
+
+```
+swift run TrimmyCLI --trim /path/to/file --aggressiveness high --json
+```
+
+Pipe stdin:
+
+```
+pbpaste | swift run TrimmyCLI --trim - --force
+```
+
+Options:
+- `--force/-f` forces High aggressiveness
+- `--aggressiveness {low|normal|high}`
+- `--preserve-blank-lines` / `--no-preserve-blank-lines`
+- `--remove-box-drawing` / `--keep-box-drawing`
+- `--json` emits `{original, trimmed, transformed}`
+- Exit codes: 0 success, 1 no input/error, 2 no transformation, 3 JSON encode error
+
 ## Lint / Format
 - Format: `swiftformat`.
 - Lint: `swiftlint lint --fix` or `swiftlint lint`.

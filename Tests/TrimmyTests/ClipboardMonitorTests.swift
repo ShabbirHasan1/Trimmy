@@ -235,4 +235,27 @@ struct ClipboardMonitorTests {
         #expect(struckIndices.count == 1)
         #expect((rendered as NSString).substring(with: NSRange(location: struckIndices[0], length: 1)) == "·")
     }
+
+    @Test
+    func struckHandlesTabsAndNewlines() {
+        let original = "foo\tbar\nbaz"
+        let trimmed = "foobar baz"
+
+        let attributed = ClipboardMonitor.struck(original: original, trimmed: trimmed)
+        let ns = NSAttributedString(attributed)
+        let rendered = ns.string
+
+        // Tabs turn to ⇥, newlines to ⏎
+        #expect(rendered.contains("⇥"))
+        #expect(rendered.contains("⏎"))
+
+        var struckChars: [Character] = []
+        for idx in 0..<ns.length where ns.attribute(.strikethroughStyle, at: idx, effectiveRange: nil) != nil {
+            struckChars.append(Character((rendered as NSString).substring(with: NSRange(location: idx, length: 1))))
+        }
+
+        // Tab and newline should both be struck
+        #expect(struckChars.contains("⇥"))
+        #expect(struckChars.contains("⏎"))
+    }
 }

@@ -5,6 +5,7 @@
 
 ## 0.4.8 — Unreleased
 - Fixed strike-through preview: removed decorative pipes (│) now strike correctly, whitespace deletions show as struck dots, and truncation no longer hides removed characters.
+- Added headless CLI (`TrimmyCLI`) with `--trim` flag, sharing the same heuristics; supports stdin, json output, aggressiveness/blank-line/box-drawing options.
 
 ## 0.4.6 — 2025-12-02
 - Further tightened box-glyph cleanup so terminal-wrapped URLs (e.g., `releases/ │ download/...`) rejoin correctly without extra spaces.
