@@ -65,6 +65,28 @@ struct CommandDetector {
             with: "| ",
             options: .regularExpression)
 
+        // Remove box-drawing runs inserted mid-token (e.g. terminal wraps a long URL and injects "│").
+        // Join path/URL segments where a box glyph was inserted (preserve adjacency).
+        let boxPathJoinPattern = #"([:/])\s*\#(boxDrawingCharacterClass)+\s*([A-Za-z0-9])"#
+        result = result.replacingOccurrences(
+            of: boxPathJoinPattern,
+            with: "$1$2",
+            options: .regularExpression)
+
+        // In other contexts, replace the glyph with a single space.
+        let boxMidTokenPattern = #"(\S)\s*\#(boxDrawingCharacterClass)+\s*(\S)"#
+        result = result.replacingOccurrences(
+            of: boxMidTokenPattern,
+            with: "$1 $2",
+            options: .regularExpression)
+
+        // Remove any remaining standalone box-drawing runs anywhere else (common when terminals wrap lines with │
+        // markers).
+        result = result.replacingOccurrences(
+            of: #"\s*\#(boxDrawingCharacterClass)+\s*"#,
+            with: " ",
+            options: .regularExpression)
+
         // Collapse any doubled spaces left behind after stripping the glyphs.
         let collapsed = result.replacingOccurrences(
             of: #" {2,}"#,

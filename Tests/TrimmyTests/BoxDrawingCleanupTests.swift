@@ -18,6 +18,15 @@ struct BoxDrawingCleanupTests {
     }
 
     @Test
+    func removesBoxDrawingInsertedByTerminalWrap() {
+        let input =
+            "curl -I https://github.com/steipete/Trimmy/releases/ │ download/v0.4.5/Trimmy-0.4.5.zip | head -n 5"
+        let cleaned = CommandDetector.stripBoxDrawingCharacters(in: input)
+        #expect(cleaned
+            == "curl -I https://github.com/steipete/Trimmy/releases/download/v0.4.5/Trimmy-0.4.5.zip | head -n 5")
+    }
+
+    @Test
     func leavesBarsWhenNoPipePresent() {
         let input = "│ this line has decoration but no pipe"
         // Even without a pipe, lone box glyphs should be stripped.

@@ -423,7 +423,7 @@ struct TrimmyTests {
         plain line
         plain line two
         """
-        #expect(detector.cleanBoxDrawingCharacters(text) == nil)
+        #expect(detector.cleanBoxDrawingCharacters(text) == "echo hi\nplain line\nplain line two")
     }
 
     @Test
@@ -488,7 +488,7 @@ struct TrimmyTests {
         settings.removeBoxDrawing = true
         let detector = CommandDetector(settings: settings)
         let text = "echo │hi│ there"
-        #expect(detector.cleanBoxDrawingCharacters(text) == nil)
+        #expect(detector.cleanBoxDrawingCharacters(text) == "echo hi there")
     }
 
     @Test
