@@ -1,11 +1,11 @@
 # Changelog
 
+## 0.5.0 — Unreleased
+- Added headless CLI (`TrimmyCLI`) with `--trim` flag, sharing the same heuristics; supports stdin, json output, aggressiveness/blank-line/box-drawing options.
+- Fixed strike-through preview: removed decorative pipes (│) now strike correctly, whitespace deletions show as struck dots, and truncation no longer hides removed characters.
+
 ## 0.4.7 — 2025-12-02
 - Packaging: SwiftPM resource bundles are now symlinked to the app root so `KeyboardShortcuts`’ `Bundle.module` resolves in user builds (prevents Settings → Shortcuts crash).
-
-## 0.4.8 — Unreleased
-- Fixed strike-through preview: removed decorative pipes (│) now strike correctly, whitespace deletions show as struck dots, and truncation no longer hides removed characters.
-- Added headless CLI (`TrimmyCLI`) with `--trim` flag, sharing the same heuristics; supports stdin, json output, aggressiveness/blank-line/box-drawing options.
 
 ## 0.4.6 — 2025-12-02
 - Further tightened box-glyph cleanup so terminal-wrapped URLs (e.g., `releases/ │ download/...`) rejoin correctly without extra spaces.
