@@ -97,13 +97,13 @@ def repl(path: pathlib.Path, pattern: str, replacement: str):
 
 repl(pathlib.Path("Scripts/package_app.sh"),
      r'(CFBundleShortVersionString</key><string>)([^<]+)',
-     rf"\1{ver}")
+     rf"\g<1>{ver}")
 repl(pathlib.Path("Scripts/package_app.sh"),
      r'(CFBundleVersion</key><string>)([^<]+)',
-     rf"\1{build}")
+     rf"\g<1>{build}")
 repl(pathlib.Path("Scripts/sign-and-notarize.sh"),
      r'^(ZIP_NAME=)"Trimmy-[^"]+\.zip"$',
-     rf'\1"Trimmy-{ver}.zip"')
+     rf'\g<1>"Trimmy-{ver}.zip"')
 PY
 }
 
