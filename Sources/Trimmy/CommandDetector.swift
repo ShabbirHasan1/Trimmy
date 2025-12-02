@@ -5,6 +5,12 @@ private let boxDrawingCharacterClass = "[│┃╎╏┆┇┊┋╽╿￨｜]"
 @MainActor
 struct CommandDetector {
     let settings: AppSettings
+    private static let knownCommandPrefixes: [String] = [
+        "sudo", "./", "~/", "apt", "brew", "git", "python", "pip", "pnpm", "npm", "yarn", "cargo",
+        "bundle", "rails", "go", "make", "xcodebuild", "swift", "kubectl", "docker", "podman", "aws",
+        "gcloud", "az", "ls", "cd", "cat", "echo", "env", "export", "open", "node", "java", "ruby",
+        "perl", "bash", "zsh", "fish", "pwsh", "sh",
+    ]
 
     nonisolated static func stripBoxDrawingCharacters(in text: String) -> String? {
         var result = text
@@ -153,6 +159,13 @@ struct CommandDetector {
 
         let lines = text.split(whereSeparator: { $0.isNewline })
         guard lines.count >= 2 else { return nil }
+        let newlineCount = text.components(separatedBy: "\n").count - 1
+        if aggressivenessOverride != .high, newlineCount > 4 {
+            return nil
+        }
+        if aggressivenessOverride != .high, self.isLikelyList(lines) {
+            return nil
+        }
         if lines.count > 10 { return nil }
 
         let aggressiveness = aggressivenessOverride ?? self.settings.aggressiveness
@@ -161,6 +174,16 @@ struct CommandDetector {
             || text.range(of: #"[|&]{1,2}"#, options: .regularExpression) != nil
             || text.range(of: #"(^|\n)\s*\$"#, options: .regularExpression) != nil
             || text.range(of: #"[A-Za-z0-9._~-]+/[A-Za-z0-9._~-]+"#, options: .regularExpression) != nil
+
+        let hasKnownCommandPrefix = self.containsKnownCommandPrefix(in: lines)
+        if aggressiveness != .high,
+           aggressivenessOverride != .high,
+           !strongCommandSignals,
+           !hasKnownCommandPrefix,
+           !self.hasCommandPunctuation(text)
+        {
+            return nil
+        }
 
         if aggressiveness != .high,
            aggressivenessOverride != .high,
@@ -212,12 +235,7 @@ struct CommandDetector {
         let hasCommandPunctuation =
             trimmed.contains(where: { "-./~$".contains($0) }) || trimmed.contains(where: \.isNumber)
         let firstToken = trimmed.split(separator: " ").first?.lowercased() ?? ""
-        let knownPrefixes = [
-            "sudo", "./", "~/", "apt", "brew", "git", "python", "pip", "pnpm", "npm", "yarn", "cargo",
-            "bundle", "rails", "go", "make", "xcodebuild", "swift", "kubectl", "docker", "podman", "aws",
-            "gcloud", "az",
-        ]
-        let startsWithKnown = knownPrefixes.contains(where: { firstToken.hasPrefix($0) })
+        let startsWithKnown = Self.knownCommandPrefixes.contains(where: { firstToken.hasPrefix($0) })
 
         guard hasCommandPunctuation || startsWithKnown else { return false }
         return self.isLikelyCommandLine(trimmed[...])
@@ -230,6 +248,44 @@ struct CommandDetector {
                 + #"interface|func|def|fn|let|var|public|private|internal|open|protected|if|for|while)\b"#
         let hasKeywords = text.range(of: keywordPattern, options: .regularExpression) != nil
         return hasBraces && hasKeywords
+    }
+
+    private func containsKnownCommandPrefix(in lines: [Substring]) -> Bool {
+        lines.contains { line in
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            guard let firstToken = trimmed.split(separator: " ").first else { return false }
+            let lower = firstToken.lowercased()
+            return Self.knownCommandPrefixes.contains(where: { lower.hasPrefix($0) })
+        }
+    }
+
+    private func hasCommandPunctuation(_ text: String) -> Bool {
+        text.range(of: #"[./~_=:-]"#, options: .regularExpression) != nil
+    }
+
+    private func isLikelyList(_ lines: [Substring]) -> Bool {
+        let nonEmpty = lines.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
+        guard nonEmpty.count >= 2 else { return false }
+
+        let listishCount = nonEmpty.count(where: { line in
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            let hasSpaces = trimmed.contains(where: \.isWhitespace)
+            let bulletPattern = #"^[-*•]\s+\S"#
+            let numberedPattern = #"^[0-9]+[.)]\s+\S"#
+            let bareTokenPattern = #"^[A-Za-z0-9]{4,}$"#
+
+            if trimmed.range(of: bulletPattern, options: .regularExpression) != nil { return true }
+            if trimmed.range(of: numberedPattern, options: .regularExpression) != nil { return true }
+            if !hasSpaces,
+               trimmed.range(of: bareTokenPattern, options: .regularExpression) != nil,
+               trimmed.range(of: #"[./$]"#, options: .regularExpression) == nil
+            {
+                return true
+            }
+            return false
+        })
+
+        return listishCount >= (nonEmpty.count / 2 + 1)
     }
 
     private func flatten(_ text: String) -> String {

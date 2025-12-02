@@ -86,7 +86,7 @@ struct TrimmyTests {
         - item one
         - item two
         """
-        #expect(detector.transformIfCommand(text) == "- item one - item two")
+        #expect(detector.transformIfCommand(text) == nil)
     }
 
     @Test
@@ -187,7 +187,37 @@ struct TrimmyTests {
         bullet
         items
         """
-        #expect(detector.transformIfCommand(text) == "Meeting notes: bullet items")
+        #expect(detector.transformIfCommand(text) == nil)
+    }
+
+    @Test
+    func normalSkipsPlainIdLists() {
+        let settings = AppSettings()
+        settings.aggressiveness = .normal
+        let detector = CommandDetector(settings: settings)
+        let ids = """
+        3c43356531
+        0c25477230
+        5837bc2cbe
+        4006d4714a
+        014b008f6a
+        """
+        #expect(detector.transformIfCommand(ids) == nil)
+    }
+
+    @Test
+    func skipsLongerMultilineSnippetsInNormalMode() {
+        let settings = AppSettings()
+        settings.aggressiveness = .normal
+        let detector = CommandDetector(settings: settings)
+        let text = """
+        line1
+        line2
+        line3
+        line4
+        line5
+        """
+        #expect(detector.transformIfCommand(text) == nil)
     }
 
     @Test

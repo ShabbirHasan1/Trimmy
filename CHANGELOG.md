@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.5.1 — Unreleased
-- _TBD_
+- Auto-trim (Low/Normal) now skips list-like snippets (bullets, numbered rows, plain token/ID columns) and copies with more than four newlines to avoid mangling hashes/IDs; High/manual override still flattens on demand. Regression tests cover the list/id scenarios.
 
 ## 0.5.0 — 2025-12-02
 - Added headless CLI (`TrimmyCLI`) with `--trim` flag, sharing the same heuristics; supports stdin, json output, aggressiveness/blank-line/box-drawing options.
