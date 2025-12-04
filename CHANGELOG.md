@@ -5,9 +5,6 @@
 - Added in-app Accessibility permission prompts and menu/settings callouts so “Paste Trimmed/Original” explains how to enable ⌘V injection when permission is missing.
 - Added CLI installer in Settings → General that symlinks the bundled TrimmyCLI into /usr/local/bin and /opt/homebrew/bin as `trimmy`.
 
-## 0.5.2 — Unreleased
-- _TBD_
-
 ## 0.5.1 — 2025-12-02
 - Auto-trim (Low/Normal) now skips list-like snippets (bullets, numbered rows, plain token/ID columns) and copies with more than four newlines to avoid mangling hashes/IDs; High/manual override still flattens on demand. Regression tests cover the list/id scenarios.
 
