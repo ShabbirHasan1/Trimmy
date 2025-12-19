@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6.3 — 2025-12-19
+## 0.6.3 — 2025-12-192025-12-19
 - CI: publish Linux `TrimmyCLI` release assets (`.tar.gz` + `.sha256`) so Linux users can install without building from source.
 - Thanks to @JaviSoto for contributing the workflow.
 

@@ -174,7 +174,7 @@ sign_zip() {
 
 extract_notes() {
   LOG "Extracting release notes from CHANGELOG.md"
-  NOTES_PATH=$(mktemp /tmp/trimmy-notes-XXXX.md)
+  NOTES_PATH=$(mktemp -t trimmy-notes.XXXXXX)
   python3 - "$VERSION" "$NOTES_PATH" <<'PY' || ERR "Failed to extract notes"
 import sys, pathlib, re
 version = sys.argv[1]

@@ -2,6 +2,15 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <item>
+            <title>0.6.3</title>
+            <pubDate>Fri, 19 Dec 2025 23:25:21 +0100</pubDate>
+            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
+            <sparkle:version>23</sparkle:version>
+            <sparkle:shortVersionString>0.6.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.6.3/Trimmy-0.6.3.zip" length="2554756" type="application/octet-stream" sparkle:edSignature="j5eMTiOjxw/tD7cK4rbuiO3uPQ81kwH2vLOWuhlJh3zT/pu//pIwCafI240J1oikOKsmjB7G3Y6M38kgUg17CQ=="/>
+        </item>
+        <item>
             <title>0.6.2</title>
             <pubDate>Wed, 17 Dec 2025 21:42:06 +0100</pubDate>
             <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
