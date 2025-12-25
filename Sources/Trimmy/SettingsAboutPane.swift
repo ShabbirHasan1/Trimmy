@@ -114,10 +114,12 @@ struct AboutPane: View {
             guard let updater, !self.didLoadUpdaterState else { return }
             // Ensure Sparkle matches the persisted preference on first load.
             updater.automaticallyChecksForUpdates = self.autoCheckEnabled
+            updater.automaticallyDownloadsUpdates = self.autoCheckEnabled
             self.didLoadUpdaterState = true
         }
         .onChange(of: self.autoCheckEnabled) { _, newValue in
             self.updater?.automaticallyChecksForUpdates = newValue
+            self.updater?.automaticallyDownloadsUpdates = newValue
         }
     }
 

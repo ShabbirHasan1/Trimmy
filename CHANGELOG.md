@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.6.4 — Unreleased
-- _TBD_
+- Sparkle: auto-download updates when auto-check is enabled, and only show the restart menu entry once an update is ready.
 
 ## 0.6.3 — 2025-12-19
 - CI: publish Linux `TrimmyCLI` release assets (`.tar.gz` + `.sha256`) so Linux users can install without building from source.

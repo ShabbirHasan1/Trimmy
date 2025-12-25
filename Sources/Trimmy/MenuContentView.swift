@@ -1,6 +1,6 @@
 import AppKit
 import KeyboardShortcuts
-import Sparkle
+import Observation
 import SwiftUI
 
 @MainActor
@@ -10,8 +10,24 @@ struct MenuContentView: View {
     @ObservedObject var hotkeyManager: HotkeyManager
     @ObservedObject var permissions: AccessibilityPermissionManager
     let updater: UpdaterProviding
+    @Bindable private var updateStatus: UpdateStatus
 
     @Environment(\.openSettings) private var openSettings
+
+    init(
+        monitor: ClipboardMonitor,
+        settings: AppSettings,
+        hotkeyManager: HotkeyManager,
+        permissions: AccessibilityPermissionManager,
+        updater: UpdaterProviding)
+    {
+        self._monitor = ObservedObject(wrappedValue: monitor)
+        self._settings = ObservedObject(wrappedValue: settings)
+        self._hotkeyManager = ObservedObject(wrappedValue: hotkeyManager)
+        self._permissions = ObservedObject(wrappedValue: permissions)
+        self.updater = updater
+        self._updateStatus = Bindable(wrappedValue: updater.updateStatus)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -30,6 +46,9 @@ struct MenuContentView: View {
             .keyboardShortcut(",", modifiers: [.command])
             Button("About Trimmy") {
                 self.open(tab: .about)
+            }
+            if updater.isAvailable, self.updateStatus.isUpdateReady {
+                Button("Update ready, restart now?") { updater.checkForUpdates(nil) }
             }
         }
         .padding(.vertical, 6)
