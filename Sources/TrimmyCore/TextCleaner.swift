@@ -91,8 +91,7 @@ public struct TextCleaner: Sendable {
 
         let lines = text.split(whereSeparator: { $0.isNewline })
         guard lines.count >= 2 else { return nil }
-        let newlineCount = text.components(separatedBy: "\n").count - 1
-        if aggressivenessOverride != .high, newlineCount > 4 {
+        if aggressivenessOverride != .high, lines.count > 4 {
             return nil
         }
         if aggressivenessOverride != .high, self.isLikelyList(lines) {

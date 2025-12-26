@@ -266,14 +266,16 @@ struct TrimmyTests {
         let settings = AppSettings()
         settings.aggressiveness = .normal
         let detector = CommandDetector(settings: settings)
-        let text = """
-        line1
-        line2
-        line3
-        line4
-        line5
-        """
+        let text = "curl https://example.com \\\n"
+            + "  -H \"a: b\" \\\n"
+            + "  -H \"c: d\" \\\n"
+            + "  -H \"e: f\" \\\n"
+            + "  -H \"g: h\""
         #expect(detector.transformIfCommand(text) == nil)
+
+        let forced = detector.transformIfCommand(text, aggressivenessOverride: .high)
+        #expect(forced != nil)
+        #expect(forced?.contains("\n") == false)
     }
 
     @Test
