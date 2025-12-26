@@ -47,8 +47,8 @@ struct MenuContentView: View {
             Button("About Trimmy") {
                 self.open(tab: .about)
             }
-            if updater.isAvailable, self.updateStatus.isUpdateReady {
-                Button("Update ready, restart now?") { updater.checkForUpdates(nil) }
+            if self.updater.isAvailable, self.updateStatus.isUpdateReady {
+                Button("Update ready, restart now?") { self.updater.checkForUpdates(nil) }
             }
         }
         .padding(.vertical, 6)

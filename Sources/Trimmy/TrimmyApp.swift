@@ -208,8 +208,8 @@ final class SparkleUpdaterController: NSObject, UpdaterProviding, SPUUpdaterDele
         _ updater: SPUUpdater,
         userDidMake choice: SPUUserUpdateChoice,
         forUpdate updateItem: SUAppcastItem,
-        state: SPUUserUpdateState
-    ) {
+        state: SPUUserUpdateState)
+    {
         let downloaded = state.stage == .downloaded
         Task { @MainActor in
             switch choice {

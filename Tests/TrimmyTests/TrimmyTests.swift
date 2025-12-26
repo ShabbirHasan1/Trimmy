@@ -84,6 +84,18 @@ struct TrimmyTests {
     }
 
     @Test
+    func flattensIndentedContinuationArguments() {
+        let settings = AppSettings()
+        settings.aggressiveness = .normal
+        let detector = CommandDetector(settings: settings)
+        let text = """
+        gog auth add
+            steipete@gmail.com --services all --force-consent
+        """
+        #expect(detector.transformIfCommand(text) == "gog auth add steipete@gmail.com --services all --force-consent")
+    }
+
+    @Test
     func repairsAllCapsTokenBreaks() {
         let settings = AppSettings()
         settings.aggressiveness = .normal

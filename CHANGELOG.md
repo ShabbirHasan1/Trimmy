@@ -2,6 +2,8 @@
 
 ## 0.6.4 — Unreleased
 - Sparkle: auto-download updates when auto-check is enabled, and only show the restart menu entry once an update is ready.
+- Command detection: flatten “command + indented args” copies (e.g. emails + flags) into a single pasteable line at Normal aggressiveness.
+- Dependencies: refreshed SwiftPM pins (Sparkle 2.8.1, KeyboardShortcuts 1.17.0, MenuBarExtraAccess 1.2.2).
 
 ## 0.6.3 — 2025-12-19
 - CI: publish Linux `TrimmyCLI` release assets (`.tar.gz` + `.sha256`) so Linux users can install without building from source.

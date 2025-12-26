@@ -149,6 +149,7 @@ public struct TextCleaner: Sendable {
         if text.contains("\\\n") { score += 1 }
         if text.range(of: #"[|&]{1,2}"#, options: .regularExpression) != nil { score += 1 }
         if text.range(of: #"(^|\n)\s*\$"#, options: .regularExpression) != nil { score += 1 }
+        if self.isSingleCommandWithIndentedContinuations(nonEmptyLines) { score += 1 }
         if lines.allSatisfy(self.isLikelyCommandLine(_:)) { score += 1 }
         if text.range(of: #"(?m)^\s*(sudo\s+)?[A-Za-z0-9./~_-]+"#, options: .regularExpression) != nil { score += 1 }
         if text.range(of: #"[A-Za-z0-9._~-]+/[A-Za-z0-9._~-]+"#, options: .regularExpression) != nil { score += 1 }
@@ -203,6 +204,40 @@ public struct TextCleaner: Sendable {
         return hasBraces && hasKeywords
     }
 
+    private func isSingleCommandWithIndentedContinuations(_ lines: [Substring]) -> Bool {
+        guard lines.count >= 2 else { return false }
+        guard self.isLikelyCommandLine(lines[0]) else { return false }
+
+        var sawIndentedLine = false
+
+        for line in lines.dropFirst() {
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            guard !trimmed.isEmpty else { continue }
+
+            if line.first?.isWhitespace == true {
+                sawIndentedLine = true
+                continue
+            }
+
+            if trimmed.hasPrefix("|")
+                || trimmed.hasPrefix("&&")
+                || trimmed.hasPrefix("||")
+                || trimmed.hasPrefix(";")
+                || trimmed.hasPrefix(">")
+                || trimmed.hasPrefix("2>")
+                || trimmed.hasPrefix("<")
+                || trimmed.hasPrefix("--")
+                || trimmed.hasPrefix("-")
+            {
+                continue
+            }
+
+            return false
+        }
+
+        return sawIndentedLine
+    }
+
     private func containsKnownCommandPrefix(in lines: [Substring]) -> Bool {
         lines.contains { line in
             let trimmed = line.trimmingCharacters(in: .whitespaces)
@@ -213,7 +248,46 @@ public struct TextCleaner: Sendable {
     }
 
     private func hasCommandPunctuation(_ text: String) -> Bool {
-        text.range(of: #"[./~_=:-]"#, options: .regularExpression) != nil
+        if text.contains("@") { return true }
+
+        if text.range(
+            of: #"(?m)(?:^|\s)--[A-Za-z0-9][A-Za-z0-9_-]*"#,
+            options: .regularExpression) != nil
+        {
+            return true
+        }
+
+        if text.range(
+            of: #"(?m)(?:^|\s)-[A-Za-z](?:\s|\z)"#,
+            options: .regularExpression) != nil
+        {
+            return true
+        }
+
+        if text.range(
+            of: #"(?m)\b[A-Za-z_][A-Za-z0-9_]*="#,
+            options: .regularExpression) != nil
+        {
+            return true
+        }
+
+        if text.range(
+            of: #"(?m)(?:^|\s)(?:\./|~/|/)"#,
+            options: .regularExpression) != nil
+        {
+            return true
+        }
+
+        if text.range(
+            of: #"(?m)(?:^|\s)\.[A-Za-z0-9_-]+"#,
+            options: .regularExpression) != nil
+        {
+            return true
+        }
+
+        if text.contains("<") || text.contains(">") { return true }
+
+        return false
     }
 
     private func isLikelyList(_ lines: [Substring]) -> Bool {
