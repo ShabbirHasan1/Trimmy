@@ -11,7 +11,7 @@ Goal: use Peekaboo to open Trimmy from the menu bar, open Settings, capture scre
 
 ## Prereqs
 - Trimmy running (`open -a Trimmy`).
-- Peekaboo CLI built (`Apps/CLI/.build/arm64-apple-macosx/debug/peekaboo`).
+- Peekaboo CLI built (`Apps/CLI/.build/arm64-apple-macosx/debug/peekaboo` or `/tmp/peekaboo-cli-build/debug/peekaboo`).
 - Permissions granted: `peekaboo permissions status`.
 
 ## Notes
@@ -19,6 +19,7 @@ Goal: use Peekaboo to open Trimmy from the menu bar, open Settings, capture scre
   Peekaboo `clipboard --action set --text` writes both `public.plain-text` + `public.utf8-plain-text`.
 - The settings checkbox element IDs are dynamic per snapshot; capture a fresh snapshot and use those IDs.
 - Use `peekaboo see --menubar` after a menu bar click to OCR the popover when needed.
+- Remember: `peekaboo menu click --app Trimmy --item "Settings…"` is the reliable settings opener.
 
 ## Runbook
 
@@ -63,7 +64,7 @@ Apps/CLI/.build/arm64-apple-macosx/debug/peekaboo see --menubar --json-output --
 
 5) Open Trimmy Settings (menu bar popover)
 ```bash
-osascript -e 'tell application "System Events" to tell process "Trimmy" to click menu item "Settings…" of menu 1 of menu bar item "Trimmy" of menu bar 1'
+Apps/CLI/.build/arm64-apple-macosx/debug/peekaboo menu click --app Trimmy --item "Settings…"
 ```
 
 6) Capture Settings screenshot
@@ -74,7 +75,7 @@ Apps/CLI/.build/arm64-apple-macosx/debug/peekaboo image --window-id <settings-wi
 
 7) Grab checkbox IDs (snapshot + jq)
 ```bash
-Apps/CLI/.build/arm64-apple-macosx/debug/peekaboo see --window-id <settings-window-id> --annotate \
+Apps/CLI/.build/arm64-apple-macosx/debug/peekaboo see --app Trimmy --window-title "General" --annotate \
   --json-output --output /private/tmp/trimmy-settings-annotated.png \
   > /private/tmp/trimmy-settings.json
 jq -r '.data.ui_elements[] | select(.role=="checkbox") | "\(.id)\t\(.description)"' /private/tmp/trimmy-settings.json
@@ -136,6 +137,16 @@ code /Users/steipete/Projects/Trimmy/docs/manual-testing-peekaboo.md
 Update the “Latest run” block with date, machine, and outcome.
 
 ## Latest run
+- Date: 2025-12-28 15:10 local
+- Machine: macOS 26.x (arm64)
+- Menu bar click: `menubar click --verify "Trimmy"` succeeded; `see --menubar` still captured Screenshot popover.
+- Settings open: `peekaboo menu click --app Trimmy --item "Settings…"` succeeded.
+- Screenshots: `/Users/steipete/Desktop/Screenshots/peekaboo_see_1766934653.png` (Settings), `/Users/steipete/Desktop/Screenshots/peekaboo_see_1766933921.png` (menubar OCR).
+- See: `peekaboo see --app Trimmy --window-title "General"` succeeded via window-id capture (remote).
+- Clipboard E2E: clipboard set/get OK; Auto-trim toggle did not change output (still multiline). Needs follow-up.
+- Clipboard restored: slot `trimmy-e2e`.
+
+## Previous run
 - Date: 2025-12-28 12:25 GMT
 - Machine: macOS 26.2 (arm64)
 - Menu bar click: `menubar click --verify "Trimmy"` + `--index 6` failed (popover not detected); fallback AppleScript open worked.
@@ -167,7 +178,7 @@ Dismiss the dialog manually or via coordinate click, then re-run the menu bar cl
 
 3) Settings window does not open from the popover
 ```bash
-osascript -e 'tell application "System Events" to tell process "Trimmy" to click menu item "Settings…" of menu 1 of menu bar item "Trimmy" of menu bar 1'
+Apps/CLI/.build/arm64-apple-macosx/debug/peekaboo menu click --app Trimmy --item "Settings…"
 ```
 
 4) `peekaboo see` can’t find settings elements
