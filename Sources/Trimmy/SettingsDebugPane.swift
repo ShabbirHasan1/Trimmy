@@ -18,19 +18,12 @@ struct DebugSettingsPane: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            PreferenceToggleRow(
-                title: "Enable debug tools",
-                subtitle: "Show preview helpers and other debug-only controls.",
-                binding: self.$settings.debugPaneEnabled)
+            Button("Load strikeout sample") {
+                self.monitor.debugSetPreview(original: self.sampleOriginal, trimmed: self.sampleTrimmed)
+            }
 
-            if self.settings.debugPaneEnabled {
-                Button("Load strikeout sample") {
-                    self.monitor.debugSetPreview(original: self.sampleOriginal, trimmed: self.sampleTrimmed)
-                }
-
-                Button("Trigger trim animation") {
-                    self.monitor.triggerTrimPulse()
-                }
+            Button("Trigger trim animation") {
+                self.monitor.triggerTrimPulse()
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

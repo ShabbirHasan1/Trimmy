@@ -15,6 +15,10 @@ struct SettingsView: View {
                 .tabItem { Label("General", systemImage: "gearshape") }
                 .tag(SettingsTab.general)
 
+            AdvancedSettingsPane(settings: self.settings)
+                .tabItem { Label("Advanced", systemImage: "gearshape.2") }
+                .tag(SettingsTab.advanced)
+
             AggressivenessSettingsPane(settings: self.settings)
                 .tabItem { Label("Aggressiveness", systemImage: "speedometer") }
                 .tag(SettingsTab.aggressiveness)
@@ -60,7 +64,7 @@ struct SettingsView: View {
 }
 
 enum SettingsTab: String, Hashable, CaseIterable, Codable {
-    case general, aggressiveness, shortcuts, about
+    case general, advanced, aggressiveness, shortcuts, about
     #if DEBUG
     case debug
     #endif

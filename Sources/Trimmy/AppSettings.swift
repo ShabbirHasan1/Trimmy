@@ -7,6 +7,7 @@ public final class AppSettings: ObservableObject {
     @AppStorage("aggressiveness") public var aggressiveness: Aggressiveness = .normal
     @AppStorage("preserveBlankLines") public var preserveBlankLines: Bool = false
     @AppStorage("autoTrimEnabled") public var autoTrimEnabled: Bool = true
+    @AppStorage("contextAwareTrimmingEnabled") public var contextAwareTrimmingEnabled: Bool = true
     @AppStorage("removeBoxDrawing") public var removeBoxDrawing: Bool = true
     @AppStorage("usePasteboardFallbacks") var usePasteboardFallbacks: Bool = false
     @AppStorage("launchAtLogin") var launchAtLogin: Bool = false {

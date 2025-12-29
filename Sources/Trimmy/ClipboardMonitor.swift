@@ -9,6 +9,7 @@ final class ClipboardMonitor: ObservableObject {
     private let pasteboard: NSPasteboard
     private let trimmyMarker = NSPasteboard.PasteboardType("com.steipete.trimmy")
     private let accessibilityPermission: AccessibilityPermissionChecking
+    private let sourceTracker: ClipboardSourceTracker
     private var timer: DispatchSourceTimer?
     private var lastSeenChangeCount: Int
     private var detector: CommandDetector { CommandDetector(settings: self.settings) }
@@ -35,6 +36,10 @@ final class ClipboardMonitor: ObservableObject {
         self.settings = settings
         self.pasteboard = pasteboard
         self.accessibilityPermission = accessibilityPermission
+        self.sourceTracker = ClipboardSourceTracker(
+            settings: settings,
+            pasteboard: pasteboard,
+            accessibilityPermission: accessibilityPermission)
         self.pasteRestoreDelay = pasteRestoreDelay
         self.pasteIntoFrontmostApp = pasteAction ?? ClipboardMonitor.sendPasteCommand
         self.lastSeenChangeCount = self.pasteboard.changeCount
@@ -52,6 +57,7 @@ final class ClipboardMonitor: ObservableObject {
 
     func start() {
         self.stop()
+        self.sourceTracker.updateIfNeeded()
         let t = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         t.schedule(deadline: .now(), repeating: self.pollInterval, leeway: self.pollLeeway)
         t.setEventHandler { [weak self] in
@@ -64,15 +70,21 @@ final class ClipboardMonitor: ObservableObject {
     func stop() {
         self.timer?.cancel()
         self.timer = nil
+        self.sourceTracker.stop()
     }
 
     @discardableResult
     func trimClipboardIfNeeded(force: Bool = false) -> Bool {
+        self.trimClipboardIfNeeded(force: force, sourceContext: nil)
+    }
+
+    @discardableResult
+    private func trimClipboardIfNeeded(force: Bool = false, sourceContext: ClipboardSourceContext?) -> Bool {
         let changeCount = self.pasteboard.changeCount
         self.lastSeenChangeCount = changeCount
         self.logTrimCheck(changeCount: changeCount, force: force)
 
-        guard let variants = self.makeVariants(force: force, ignoreMarker: force) else {
+        guard let variants = self.makeVariants(force: force, ignoreMarker: force, sourceContext: sourceContext) else {
             self.logTrimSkip(reason: "noVariants", force: force)
             // For forced/manual trims, still surface the current clipboard text in “Last” even when
             // nothing was transformed, so the menu reflects what the user tried to trim.
@@ -102,6 +114,7 @@ final class ClipboardMonitor: ObservableObject {
     }
 
     private func tick() {
+        self.sourceTracker.updateIfNeeded()
         let current = self.pasteboard.changeCount
         guard current != self.lastSeenChangeCount else { return }
 
@@ -109,15 +122,26 @@ final class ClipboardMonitor: ObservableObject {
         self.logPasteboardChange(changeCount: current, ignored: isIgnored)
 
         if self.ignoredChangeCounts.remove(current) != nil {
+            Telemetry.clipboard.debug("Ignoring changeCount=\(current, privacy: .public) (self-write).")
             self.lastSeenChangeCount = current
             return
         }
 
         let observed = current
+        let sourceContext = self.sourceTracker.recordObservedChangeCount(observed)
+        Telemetry.clipboard.debug(
+            "Observed changeCount=\(observed, privacy: .public) src=\(sourceContext.debugLabel, privacy: .public).")
         // Grace delay lets promised pasteboard data settle before we read/transform.
         DispatchQueue.main.asyncAfter(deadline: .now() + self.graceDelay) { [weak self] in
-            guard let self, observed == self.pasteboard.changeCount else { return }
-            _ = self.trimClipboardIfNeeded()
+            guard let self else { return }
+            guard observed == self.pasteboard.changeCount else {
+                self.sourceTracker.discardObservedChangeCount(observed)
+                Telemetry.clipboard.debug(
+                    "Skipping observed changeCount=\(observed, privacy: .public) (changed again).")
+                return
+            }
+            let ctx = self.sourceTracker.consumeContext(forObservedChangeCount: observed)
+            _ = self.trimClipboardIfNeeded(force: false, sourceContext: ctx)
             self.lastSeenChangeCount = self.pasteboard.changeCount
         }
     }
@@ -322,7 +346,7 @@ extension ClipboardMonitor {
 
     private func cachedOrCurrentVariantsForPaste(force: Bool) -> ClipboardVariants? {
         if let cachedOriginal = self.lastOriginalText {
-            let variants = self.transform(text: cachedOriginal, force: force)
+            let variants = self.transform(text: cachedOriginal, force: force, sourceContext: nil)
             self.cache(original: cachedOriginal, trimmed: variants.trimmed)
             return variants
         }
@@ -330,14 +354,18 @@ extension ClipboardMonitor {
         return self.makeVariants(force: force, ignoreMarker: true)
     }
 
-    private func makeVariants(force: Bool, ignoreMarker: Bool) -> ClipboardVariants? {
+    private func makeVariants(
+        force: Bool,
+        ignoreMarker: Bool,
+        sourceContext: ClipboardSourceContext? = nil) -> ClipboardVariants?
+    {
         guard let text = self.readTextFromPasteboard(ignoreMarker: ignoreMarker || force) else {
             self.cache(original: nil, trimmed: nil)
             self.logTrimSkip(reason: "emptyClipboard", force: force)
             return nil
         }
 
-        let variants = self.transform(text: text, force: force)
+        let variants = self.transform(text: text, force: force, sourceContext: sourceContext)
         self.cache(original: variants.original, trimmed: variants.trimmed)
 
         if force {
@@ -350,9 +378,18 @@ extension ClipboardMonitor {
         return nil
     }
 
-    private func transform(text: String, force: Bool) -> ClipboardVariants {
+    private func transform(text: String, force: Bool, sourceContext: ClipboardSourceContext?) -> ClipboardVariants {
         var currentText = text
         var wasTransformed = false
+
+        if let sourceContext {
+            Telemetry.clipboard.debug(
+                """
+                Transform start src=\(sourceContext.debugLabel, privacy: .public) \
+                terminal=\(sourceContext.isTerminal, privacy: .public) \
+                len=\(text.count, privacy: .public).
+                """)
+        }
 
         if let cleaned = self.detector.cleanBoxDrawingCharacters(currentText) {
             currentText = cleaned
@@ -369,7 +406,13 @@ extension ClipboardMonitor {
             wasTransformed = true
         }
 
-        let overrideAggressiveness: Aggressiveness? = force ? .high : nil
+        let shouldBoost = !force && self.settings.contextAwareTrimmingEnabled && (sourceContext?.isTerminal == true)
+        let overrideAggressiveness: Aggressiveness? = (force || shouldBoost) ? .high : nil
+
+        if shouldBoost, let sourceContext {
+            Telemetry.clipboard.debug(
+                "Aggressiveness boosted to high (src=\(sourceContext.debugLabel, privacy: .public)).")
+        }
 
         if let commandTransformed = self.detector.transformIfCommand(
             currentText,
