@@ -107,8 +107,7 @@ final class ClipboardMonitor: ObservableObject {
             original: variants.original,
             trimmed: variants.trimmed,
             force: force,
-            transformed: variants.wasTransformed
-        )
+            transformed: variants.wasTransformed)
         self.registerTrimEvent()
         return true
     }
@@ -236,8 +235,7 @@ final class ClipboardMonitor: ObservableObject {
     private func logPasteboardChange(changeCount: Int, ignored: Bool) {
         let types = self.pasteboard.types?.map(\.rawValue).joined(separator: ", ") ?? "none"
         Telemetry.clipboard.debug(
-            "Pasteboard changeCount=\(changeCount, privacy: .public) ignored=\(ignored, privacy: .public) types=\(types, privacy: .public)"
-        )
+            "Pasteboard changeCount=\(changeCount, privacy: .public) ignored=\(ignored, privacy: .public) types=\(types, privacy: .public)")
     }
 
     private func logPasteboardRead(type: NSPasteboard.PasteboardType) {
@@ -250,22 +248,19 @@ final class ClipboardMonitor: ObservableObject {
 
     private func logTrimCheck(changeCount: Int, force: Bool) {
         Telemetry.clipboard.debug(
-            "Trim check changeCount=\(changeCount, privacy: .public) autoTrimEnabled=\(self.settings.autoTrimEnabled, privacy: .public) force=\(force, privacy: .public)"
-        )
+            "Trim check changeCount=\(changeCount, privacy: .public) autoTrimEnabled=\(self.settings.autoTrimEnabled, privacy: .public) force=\(force, privacy: .public)")
     }
 
     private func logTrimSkip(reason: String, force: Bool) {
         Telemetry.clipboard.debug(
-            "Trim skipped reason=\(reason, privacy: .public) force=\(force, privacy: .public)"
-        )
+            "Trim skipped reason=\(reason, privacy: .public) force=\(force, privacy: .public)")
     }
 
     private func logTrimApplied(original: String, trimmed: String, force: Bool, transformed: Bool) {
         let originalCount = original.count
         let trimmedCount = trimmed.count
         Telemetry.clipboard.debug(
-            "Trim applied transformed=\(transformed, privacy: .public) force=\(force, privacy: .public) lengths=\(originalCount, privacy: .public)->\(trimmedCount, privacy: .public)"
-        )
+            "Trim applied transformed=\(transformed, privacy: .public) force=\(force, privacy: .public) lengths=\(originalCount, privacy: .public)->\(trimmedCount, privacy: .public)")
     }
 }
 
