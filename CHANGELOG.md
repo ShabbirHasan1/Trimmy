@@ -3,6 +3,7 @@
 ## 0.7.0 — Unreleased
 - Context-aware trimming: detect copies from Terminal/iTerm/kitty/Warp and trim more eagerly (Cmd-C tracking + frontmost-app fallback).
 - Settings: added Advanced tab and moved CLI installer, debug tools, and clipboard fallbacks there.
+- Menu bar icon now animates whenever a trim happens.
 
 ## 0.6.4 — 2025-12-26
 - Sparkle: auto-download updates when auto-check is enabled, and only show the restart menu entry once an update is ready.
