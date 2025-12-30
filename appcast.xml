@@ -2,6 +2,25 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <item>
+            <title>0.7.0</title>
+            <pubDate>Tue, 30 Dec 2025 03:43:38 +0100</pubDate>
+            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
+            <sparkle:version>27</sparkle:version>
+            <sparkle:shortVersionString>0.7.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[<h2>Trimmy 0.7.0</h2>
+<ul>
+<li><strong>Highlight:</strong> Context-aware trimming with terminal detection, plus per-terminal aggressiveness (Cmd-C tracking + frontmost-app fallback).</li>
+<li>Terminal detection now covers Ghostty, WezTerm, Alacritty, Hyper, and Warp Stable bundle IDs for context-aware trimming.</li>
+<li>Aggressiveness now splits between general apps and terminals (defaults: Low + Normal), plus a “None” option to disable auto-trim in regular apps.</li>
+<li>Settings: added Advanced tab and moved CLI installer, debug tools, and clipboard fallbacks there.</li>
+<li>Menu bar icon now animates whenever a trim happens.</li>
+</ul>
+<p><a href="https://github.com/steipete/Trimmy/blob/main/CHANGELOG.md">View full changelog</a></p>
+]]></description>
+            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.7.0/Trimmy-0.7.0.zip" length="2600177" type="application/octet-stream" sparkle:edSignature="B+bEH+Xyqqaj6TiufWSyxHl0Ag1oKCrR32RGAlFa2kQQ9E3ahzAemQ49ZW6yUEWHNG/jJMJKq/3vVQ8AGj+tDw=="/>
+        </item>
+        <item>
             <title>0.6.4</title>
             <pubDate>Fri, 26 Dec 2025 20:02:50 +0100</pubDate>
             <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
@@ -18,7 +37,6 @@
             ]]></description>
             <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.6.4/Trimmy-0.6.4.zip" length="2564101" type="application/octet-stream" sparkle:edSignature="nSHPms43KwKzxb2ndQbWFFNB6k8Mqao6b9KiDkQi4Dno48O81hsB3Ch/FhQt2jP+4uZAh2Acf07yYgM1LxkwDQ=="/>
         </item>
-        
         <item>
             <title>0.6.3</title>
             <pubDate>Fri, 19 Dec 2025 23:25:21 +0100</pubDate>
@@ -28,150 +46,6 @@
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.6.3/Trimmy-0.6.3.zip" length="2554756" type="application/octet-stream" sparkle:edSignature="j5eMTiOjxw/tD7cK4rbuiO3uPQ81kwH2vLOWuhlJh3zT/pu//pIwCafI240J1oikOKsmjB7G3Y6M38kgUg17CQ=="/>
         </item>
-        <item>
-            <title>0.6.2</title>
-            <pubDate>Wed, 17 Dec 2025 21:42:06 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>22</sparkle:version>
-            <sparkle:shortVersionString>0.6.2</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.6.2/Trimmy-0.6.2.zip" length="2554089" type="application/octet-stream" sparkle:edSignature="8ixBeJOtlSlbRcie3vMsLQyxpqz8FEI1+HXrV4uyE9LdIwoULptq2Stwkr/L62W9Zk+riZ+xgex9UcHREkZeCg=="/>
-        </item>
-        <item>
-            <title>0.6.1</title>
-            <pubDate>Fri, 05 Dec 2025 07:47:30 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>21</sparkle:version>
-            <sparkle:shortVersionString>0.6.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.6.1/Trimmy-0.6.1.zip" length="2549662" type="application/octet-stream" sparkle:edSignature="grE5rX7y7dC5WixNqaklKIrcoW7TI5e74EBswB4DPViidg3AXn3+z4O+30R4jgXkzVHumT9a54TQCUDc1Un2BA=="/>
-        </item>
-        <item>
-            <title>0.6.0</title>
-            <pubDate>Thu, 04 Dec 2025 17:46:18 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>20</sparkle:version>
-            <sparkle:shortVersionString>0.6.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.6.0/Trimmy-0.6.0.zip" length="2531546" type="application/octet-stream" sparkle:edSignature="51L+ivl13bE2d3hWShuSvJUpqh4hEXBwHD7DnyEfjhIpQcNSTwrzYLKWxToydZB0mvTFpzqOXi5xtVbpEc40Cg=="/>
-        </item>
-        <item>
-            <title>0.5.1</title>
-            <pubDate>Tue, 02 Dec 2025 15:03:22 +0000</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>19</sparkle:version>
-            <sparkle:shortVersionString>0.5.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.5.1/Trimmy-0.5.1.zip" length="2475683" type="application/octet-stream" sparkle:edSignature="+C3Xg+Ix3VOAjVp9Fd9ZzR1+ct/wHETf5K5bm0czayDRQ+7DSh4UNp9A0WAmuUd+YihCy0FTMvgGIUPubF7bDg=="/>
-        </item>
-        <item>
-            <title>0.5.0</title>
-            <pubDate>Tue, 02 Dec 2025 10:49:22 +0000</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>18</sparkle:version>
-            <sparkle:shortVersionString>0.5.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.5.0/Trimmy-0.5.0.zip" length="2473329" type="application/octet-stream" sparkle:edSignature="218gBPHkiSMnHaPqxYIdkMtka2CTXSEIyMhDHd93wUlk74WZ+i9HncIQX3e6ub2J5lqYOaPUxd85A88322MdAw=="/>
-        </item>
-        <item>
-            <title>0.4.7</title>
-            <pubDate>Tue, 02 Dec 2025 06:40:00 +0000</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>17</sparkle:version>
-            <sparkle:shortVersionString>0.4.7</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.4.7/Trimmy-0.4.7.zip" length="2368823" type="application/octet-stream" sparkle:edSignature="Q0X8ayo0uul0ksRjL5M3CqsTTRbIRKKgzpF91xlsmC/DQZq8NM2vwlmg+9KAaM6AjQOdRHZatSW7zATLfxFYCQ=="/>
-        </item>
-        <item>
-            <title>0.4.6</title>
-            <pubDate>Tue, 02 Dec 2025 03:35:33 +0000</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>16</sparkle:version>
-            <sparkle:shortVersionString>0.4.6</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.4.6/Trimmy-0.4.6.zip" length="2471261" type="application/octet-stream" sparkle:edSignature="55WEhMLYxz2V81jj+y/ro5OHLLZNgIywfCdof++UgVvs2+/1vRVRVzDuNcvtk3KOtUD/vX+TFGjfRYGnHhdTAg=="/>
-        </item>
         <title>Trimmy</title>
-        <item>
-            <title>0.4.5</title>
-            <pubDate>Tue, 02 Dec 2025 02:50:01 +0000</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>15</sparkle:version>
-            <sparkle:shortVersionString>0.4.5</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.4.5/Trimmy-0.4.5.zip" length="2470992" type="application/octet-stream" sparkle:edSignature="f6r0zu4gxh8SRkKne29tQ7KQhIRpIlCABVAdM3Pyd7ajzzyQUBpd4kyVLg2pSp3Y5YoMNEbKo3DgoUjDZHtdCg=="/>
-        </item>
-        <item>
-            <title>0.4.4</title>
-            <pubDate>Mon, 01 Dec 2025 23:55:56 +0000</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>14</sparkle:version>
-            <sparkle:shortVersionString>0.4.4</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.4.4/Trimmy-0.4.4.zip" length="2470916" type="application/octet-stream" sparkle:edSignature="pvzEXleD4kXTHrxPuQzsibfMkMmOCJsXes6YTSbuxmHBnzSHkbd+xDUDn3kOn1ymzIIVoDePk+LKT+Nc9a+tBA=="/>
-        </item>
-        <item>
-            <title>0.4.3</title>
-            <pubDate>Wed, 26 Nov 2025 01:27:10 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>13</sparkle:version>
-            <sparkle:shortVersionString>0.4.3</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.4.3/Trimmy-0.4.3.zip" length="2438220" type="application/octet-stream" sparkle:edSignature="LbKRQPD1CIxkhAt3rxm5F+I4nXJJS7GTKwii6SwJdSREvS5hCuRY0ykkcHQjo6dGaY3222COs9RIE4EGMCHRBg=="/>
-        </item>
-        <item>
-            <title>0.4.2</title>
-            <pubDate>Tue, 25 Nov 2025 12:43:56 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>12</sparkle:version>
-            <sparkle:shortVersionString>0.4.2</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.4.2/Trimmy-0.4.2.zip" length="2438163" type="application/octet-stream" sparkle:edSignature="3vCFrOFt6QYFfHBZyNhbPN5iChrkEyW8NcfWmofdlSD1sZZSWgNGRfsoh0AytWBvXBp583yxqmwcPzOm9QXLBA=="/>
-        </item>
-        <item>
-            <title>0.4.1</title>
-            <pubDate>Mon, 24 Nov 2025 09:14:54 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>11</sparkle:version>
-            <sparkle:shortVersionString>0.4.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.4.1/Trimmy-0.4.1.zip" length="2437824" type="application/octet-stream" sparkle:edSignature="HHRxF9lztR5E0LIMsZgGiUlumgTUwz3ZU4jEOFDGI76alhsiwnYvS93s7yA/wrqel+zWv78AtsmHYQco/lE+Cw=="/>
-        </item>
-        <item>
-            <title>0.4.0</title>
-            <pubDate>Fri, 21 Nov 2025 06:35:00 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>10</sparkle:version>
-            <sparkle:shortVersionString>0.4.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.4.0/Trimmy-0.4.0.zip" length="2433055" type="application/octet-stream" sparkle:edSignature="AtHGrvPATmHRR5s3RPiqWc7x7FTJ0SdPaMNX5qlLJQJqncZfKhEIchfZ9e9x6zAlBwLXtTSuiijgWEkzgDYDDA=="/>
-        </item>
-        <item>
-            <title>0.3.0</title>
-            <pubDate>Thu, 20 Nov 2025 07:12:00 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>9</sparkle:version>
-            <sparkle:shortVersionString>0.3.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.3.0/Trimmy-0.3.0.zip" length="2412378" type="application/octet-stream" sparkle:edSignature="9UxrQg2eClTXbsCVsCRcgjEdG4hi1+ZqZqd5Nrnv2hTXMopTrIg7OWKCWiM9qRDQKQAEP4RLGj5bAmCfDcirDg=="/>
-        </item>
-        <item>
-            <title>0.2.4</title>
-            <pubDate>Mon, 17 Nov 2025 21:33:22 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>8</sparkle:version>
-            <sparkle:shortVersionString>0.2.4</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.2.4/Trimmy-0.2.4.zip" length="2195652" type="application/octet-stream" sparkle:edSignature="SdnLuDR6ntm6OOwjUFq3HnTR8cITIGuGtFWr3mgc0YJ2+GP/IuHKRSPEFpBhOoHV230vT6mUyv42tle/ULxTBA=="/>
-        </item>
-        <item>
-            <title>0.2.3</title>
-            <pubDate>Mon, 17 Nov 2025 03:56:00 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>7</sparkle:version>
-            <sparkle:shortVersionString>0.2.3</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.2.3/Trimmy-0.2.3.zip" length="2174584" type="application/octet-stream" sparkle:edSignature="zrc1MUjz645+byVjX6S12njkk51O+5KO4yqf2luaFsAGtsvZxQHWvYNUgdH/x3SOY2LYmbMDg5UEHtNs4YazAQ=="/>
-        </item>
     </channel>
 </rss>
