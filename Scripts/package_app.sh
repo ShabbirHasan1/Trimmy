@@ -116,7 +116,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>LSMinimumSystemVersion</key><string>15.0</string>
     <key>LSUIElement</key><true/>
     <key>CFBundleIconFile</key><string>Icon</string>
-    <key>NSHumanReadableCopyright</key><string>© 2025 Peter Steinberger. MIT License.</string>
+    <key>NSHumanReadableCopyright</key><string>\g<1>2026 Peter Steinberger. MIT License.</string>
     <key>TrimmyBuildTimestamp</key><string>${BUILD_TIMESTAMP}</string>
     <key>TrimmyGitCommit</key><string>${GIT_COMMIT}</string>
     <key>SUFeedURL</key><string>${FEED_URL}</string>

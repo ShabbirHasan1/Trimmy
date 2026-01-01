@@ -99,7 +99,7 @@ struct AboutPane: View {
                 }
             }
 
-            Text("© 2025 Peter Steinberger. MIT License.")
+            Text("\g<1>2026 Peter Steinberger. MIT License.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .padding(.top, 4)
