@@ -2,23 +2,32 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <item>
+            <title>0.8.0</title>
+            <pubDate>Mon, 19 Jan 2026 08:31:41 +0000</pubDate>
+            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
+            <sparkle:version>28</sparkle:version>
+            <sparkle:shortVersionString>0.8.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[<h2>Trimmy 0.8.0</h2>
+<ul>
+<li>Added a menu-only “Paste Reformatted Markdown” action to join wrapped markdown paragraphs and bullet lists while preserving blank lines and fenced code blocks.</li>
+<li>Path quoting now only wraps standalone paths (not commands or sentences) when they contain spaces (#17, thanks @n0an).</li>
+</ul>
+<p><a href="https://github.com/steipete/Trimmy/blob/main/CHANGELOG.md">View full changelog</a></p>
+]]></description>
+            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.8.0/Trimmy-0.8.0.zip" length="2614209" type="application/octet-stream" sparkle:edSignature="IhZI64vmnT/SV7m3byb3r5rO9xYMxStwuGFS10r+2XjMpvbJrXy8dHj3Ete56b8ynGDz59312IpzFb3vhTXJCw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.8.0/Trimmy28-27.delta" sparkle:deltaFrom="27" length="93318" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="860528" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="wpADv2hH9LHFBsJy1hvVJFd3Z+dz/UAp4huJ+3rqhQyTkJZBPgfzg6cmQIRNag4HT+4PETuHR7gpBNYJqzHrCw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>0.7.0</title>
             <pubDate>Tue, 30 Dec 2025 03:43:38 +0100</pubDate>
             <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
             <sparkle:version>27</sparkle:version>
             <sparkle:shortVersionString>0.7.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<h2>Trimmy 0.7.0</h2>
-<ul>
-<li><strong>Highlight:</strong> Context-aware trimming with terminal detection, plus per-terminal aggressiveness (Cmd-C tracking + frontmost-app fallback).</li>
-<li>Terminal detection now covers Ghostty, WezTerm, Alacritty, Hyper, and Warp Stable bundle IDs for context-aware trimming.</li>
-<li>Aggressiveness now splits between general apps and terminals (defaults: Low + Normal), plus a “None” option to disable auto-trim in regular apps.</li>
-<li>Settings: added Advanced tab and moved CLI installer, debug tools, and clipboard fallbacks there.</li>
-<li>Menu bar icon now animates whenever a trim happens.</li>
-</ul>
-<p><a href="https://github.com/steipete/Trimmy/blob/main/CHANGELOG.md">View full changelog</a></p>
-]]></description>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.7.0/Trimmy-0.7.0.zip" length="2600177" type="application/octet-stream" sparkle:edSignature="B+bEH+Xyqqaj6TiufWSyxHl0Ag1oKCrR32RGAlFa2kQQ9E3ahzAemQ49ZW6yUEWHNG/jJMJKq/3vVQ8AGj+tDw=="/>
+            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.8.0/Trimmy-0.7.0.zip" length="2600177" type="application/octet-stream" sparkle:edSignature="B+bEH+Xyqqaj6TiufWSyxHl0Ag1oKCrR32RGAlFa2kQQ9E3ahzAemQ49ZW6yUEWHNG/jJMJKq/3vVQ8AGj+tDw=="/>
         </item>
         <item>
             <title>0.6.4</title>
@@ -36,15 +45,6 @@
             <p><a href="https://github.com/steipete/Trimmy/blob/main/CHANGELOG.md">View full changelog</a></p>
             ]]></description>
             <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.6.4/Trimmy-0.6.4.zip" length="2564101" type="application/octet-stream" sparkle:edSignature="nSHPms43KwKzxb2ndQbWFFNB6k8Mqao6b9KiDkQi4Dno48O81hsB3Ch/FhQt2jP+4uZAh2Acf07yYgM1LxkwDQ=="/>
-        </item>
-        <item>
-            <title>0.6.3</title>
-            <pubDate>Fri, 19 Dec 2025 23:25:21 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/steipete/Trimmy/main/appcast.xml</link>
-            <sparkle:version>23</sparkle:version>
-            <sparkle:shortVersionString>0.6.3</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/steipete/Trimmy/releases/download/v0.6.3/Trimmy-0.6.3.zip" length="2554756" type="application/octet-stream" sparkle:edSignature="j5eMTiOjxw/tD7cK4rbuiO3uPQ81kwH2vLOWuhlJh3zT/pu//pIwCafI240J1oikOKsmjB7G3Y6M38kgUg17CQ=="/>
         </item>
         <title>Trimmy</title>
     </channel>
