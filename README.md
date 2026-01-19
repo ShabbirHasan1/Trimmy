@@ -15,6 +15,7 @@
 - Optional "Remove box drawing chars (│┃)" to strip prompt-style gutters (any count, leading or trailing) and collapse the leftover whitespace.
 - "Paste Trimmed" button + hotkey trims on-the-fly and pastes without permanently altering the clipboard (uses High aggressiveness); shows the target app (e.g., “Paste Trimmed to Ghostty”) and strikes out removed chars in the preview.
 - "Paste Original" button + hotkey pastes the untouched copy even after auto-trim.
+- Optional “Paste Reformatted Markdown” menu action reflows wrapped Markdown paragraphs/bullets/headings while preserving blank lines and fenced code blocks.
 - Optional "Launch at login" toggle (macOS 13+ via SMAppService).
 - Auto-update via Sparkle (auto-check + auto-download; menu shows “Update ready, restart now?” once downloaded).
 - Uses a marker pasteboard type to avoid reprocessing its own writes; polls with a lightweight timer and a small grace delay to catch promised pasteboard data.
@@ -59,7 +60,7 @@ Get the precompiled binary from [Releases](https://github.com/steipete/Trimmy/re
 
 1. Build: `swift build -c release` (Swift 6, macOS 15+).
 2. Bundle: `./Scripts/package_app.sh release` → `Trimmy.app`.
-3. Launch: open `Trimmy.app` (or add to Login Items). Menu shows Auto-Trim toggle, Aggressiveness submenu, Keep blank lines toggle, Paste Trimmed/Paste Original actions, and a last-action status.
+3. Launch: open `Trimmy.app` (or add to Login Items). Menu shows Auto-Trim toggle, Aggressiveness submenu, Keep blank lines toggle, Paste Trimmed/Paste Original actions, optional Paste Reformatted Markdown, and a last-action status.
 
 ## Headless trimming (CLI)
 Use the bundled CLI to trim text without launching the UI:
